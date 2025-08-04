@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,40 +8,163 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@400;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      --primary: #ff6b00;
+      --primary-dark: #e05a00;
+      --primary-light: #ff8b33;
+      --dark: #0a0e17;
+      --darker: #06090f;
+      --card-bg: #131a2d;
+      --light: #f0f4f8;
+      --gray: #8a94a6;
+      --success: #00e676;
+      --danger: #ff3d71;
+      --card-radius: 16px;
+      --glow: 0 0 15px rgba(255, 107, 0, 0.6);
       --primary-color: #ffaa55;
       --secondary-color: #0d0d1c;
       --accent-color: #ff7700;
       --text-color: #e0e0e0;
       --error-color: #ff5555;
     }
-    
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       background: linear-gradient(135deg, var(--secondary-color), #1a1a2e);
       font-family: 'Exo 2', sans-serif;
       color: var(--text-color);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 0;
     }
-
+    /* Header/Menu styles */
+    header {
+      background: rgba(15, 20, 30, 0.95);
+      border-bottom: 2px solid var(--primary);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin-right: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-icon {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-right: 10px;
+      position: relative;
+      z-index: 2;
+      text-shadow: var(--glow);
+      animation: pulse 2s infinite;
+    }
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, var(--primary), #ffcc00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 2;
+      animation: logoGlow 3s infinite alternate;
+    }
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0) 70%);
+      animation: rotate 15s linear infinite;
+      z-index: 1;
+    }
+    nav {
+      flex-grow: 1;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+    nav li {
+      margin-right: 1.5rem;
+    }
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    nav a i {
+      margin-right: 8px;
+      font-size: 1.1rem;
+    }
+    nav a:hover {
+      background: rgba(255, 107, 0, 0.2);
+      color: var(--primary);
+    }
+    nav a.active {
+      background: rgba(255, 107, 0, 0.25);
+      color: var(--primary);
+      box-shadow: 0 4px 10px rgba(255, 107, 0, 0.2);
+    }
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 101;
+    }
+    @media (max-width: 900px) {
+      nav ul {
+        flex-direction: column;
+        background: rgba(15, 20, 30, 0.98);
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        padding: 2rem 0;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        display: none;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      .menu-btn {
+        display: block;
+      }
+    }
+    /* Calculator styles */
     .container {
       background: rgba(15, 20, 35, 0.95);
       border-radius: 20px;
       width: 100%;
       max-width: 550px;
+      margin: 40px auto;
       overflow: hidden;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       border: 1px solid rgba(255, 140, 0, 0.3);
     }
-
     .logo-container {
       background: linear-gradient(135deg, #0f0c29, #302b63);
       padding: 25px;
@@ -50,7 +173,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .logo-main {
       font-family: 'Rajdhani', sans-serif;
       font-size: 3rem;
@@ -63,7 +185,6 @@
       margin-bottom: 5px;
       animation: pulse 2s infinite alternate;
     }
-
     .logo-sub {
       font-family: 'Orbitron', sans-serif;
       font-size: 1.2rem;
@@ -73,7 +194,6 @@
       margin-top: -5px;
       animation: slideIn 1.5s ease-out;
     }
-
     .logo-decoration {
       position: absolute;
       width: 100%;
@@ -86,32 +206,26 @@
         radial-gradient(circle at 80% 70%, #00aaff, transparent 70%);
       animation: gradientShift 8s infinite alternate;
     }
-
     @keyframes pulse {
       0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 170, 85, 0.7); }
       100% { transform: scale(1.05); text-shadow: 0 0 15px rgba(255, 170, 85, 1); }
     }
-
     @keyframes slideIn {
       0% { transform: translateY(20px); opacity: 0; }
       100% { transform: translateY(0); opacity: 1; }
     }
-
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .calculator {
       padding: 25px;
     }
-
     .input-group {
       margin-bottom: 20px;
       position: relative;
     }
-
     label {
       display: flex;
       align-items: center;
@@ -122,11 +236,9 @@
       font-family: 'Rajdhani', sans-serif;
       font-weight: 600;
     }
-
     .input-container {
       position: relative;
     }
-
     input, select {
       width: 100%;
       padding: 14px 18px 14px 45px;
@@ -138,18 +250,15 @@
       font-family: 'Exo 2', sans-serif;
       transition: all 0.3s ease;
     }
-
     input:focus, select:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 6px rgba(255, 170, 85, 0.5);
     }
-
     input.error {
       border-color: var(--error-color);
       box-shadow: 0 0 6px rgba(255, 85, 85, 0.5);
     }
-
     .icon {
       position: absolute;
       left: 15px;
@@ -158,7 +267,6 @@
       color: var(--primary-color);
       font-size: 18px;
     }
-
     .btn-calculate {
       width: 100%;
       padding: 16px;
@@ -179,16 +287,13 @@
       align-items: center;
       gap: 10px;
     }
-
     .btn-calculate:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(255, 87, 0, 0.6);
     }
-
     .btn-calculate:active {
       transform: translateY(0);
     }
-
     .result {
       background: rgba(0, 0, 0, 0.3);
       border-radius: 15px;
@@ -197,7 +302,6 @@
       text-align: center;
       border: 1px solid rgba(255, 140, 0, 0.2);
     }
-
     .result-title {
       font-size: 18px;
       color: #eee;
@@ -205,7 +309,6 @@
       font-family: 'Rajdhani', sans-serif;
       letter-spacing: 1px;
     }
-
     .value {
       font-family: 'Orbitron', sans-serif;
       font-size: 36px;
@@ -214,7 +317,6 @@
       text-shadow: 0 0 10px rgba(255, 170, 85, 0.6);
       letter-spacing: 1px;
     }
-
     .explanation {
       background: rgba(0, 0, 0, 0.2);
       border-radius: 15px;
@@ -224,7 +326,6 @@
       line-height: 1.6;
       border: 1px solid rgba(255, 140, 0, 0.1);
     }
-
     .explanation h3 {
       color: var(--primary-color);
       margin-bottom: 10px;
@@ -234,7 +335,6 @@
       gap: 10px;
       font-family: 'Rajdhani', sans-serif;
     }
-
     .formula {
       background: rgba(255, 140, 0, 0.1);
       padding: 10px;
@@ -243,20 +343,17 @@
       text-align: center;
       margin: 10px 0;
     }
-
     .error-message {
       color: var(--error-color);
       font-size: 12px;
       margin-top: 5px;
       display: none;
     }
-
     .swap-container {
       display: flex;
       justify-content: space-between;
       margin-top: 5px;
     }
-
     .swap-btn {
       background: transparent;
       border: none;
@@ -267,11 +364,9 @@
       align-items: center;
       gap: 5px;
     }
-
     .custom-select {
       position: relative;
     }
-
     .custom-select-input {
       width: 100%;
       padding: 14px 18px 14px 45px;
@@ -282,7 +377,6 @@
       border: 1px solid rgba(255, 140, 0, 0.3);
       font-family: 'Exo 2', sans-serif;
     }
-
     .custom-select-options {
       position: absolute;
       top: 100%;
@@ -297,34 +391,27 @@
       z-index: 100;
       display: none;
     }
-
     .custom-select-option {
       padding: 10px 15px;
       cursor: pointer;
       transition: background 0.2s;
     }
-
     .custom-select-option:hover {
       background: rgba(255, 170, 85, 0.1);
     }
-
     .custom-select-option.active {
       background: rgba(255, 170, 85, 0.2);
     }
-
     @media (max-width: 600px) {
       .logo-main {
         font-size: 2.2rem;
       }
-      
       .logo-sub {
         font-size: 1rem;
       }
-
       .value {
         font-size: 28px;
       }
-
       .btn-calculate {
         font-size: 16px;
       }
@@ -332,54 +419,34 @@
   </style>
 </head>
 <body>
-  
-  <style>
-  /* ✅ Small Back Button Style */
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 8px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(45deg, #ff6600, #ff3300);
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgba(255, 102, 0, 0.4);
-  transition: all 0.3s ease;
-  margin: 20px;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-}
-.back-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 5px 10px rgba(255, 102, 0, 0.6);
-  background: linear-gradient(45deg, #ff4500, #ff2200);
-}
-.back-btn .arrow {
-  font-size: 10px;
-  font-weight: bold;
-}
-  </style>
-  
-  <body>
-    
-<!-- ✅ Small Back Button -->
-<button class="back-btn" onclick="window.location.href='index.html'">
-  <span class="arrow">⬅</span> Back
-</button>
-  
+  <!-- Main Menu/Header -->
+  <header>
+    <div class="logo">
+      <i class="fas fa-chart-line logo-icon"></i>
+      <div class="logo-text">EJFXPROTRADE</div>
+    </div>
+    <nav id="navMenu">
+      <ul>
+        <li><a href="index.html#home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="index.html#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
+        <li><a href="pipcalculator.html" class="active"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+        <li><a href="index.html#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
+        <li><a href="index.html#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
+        <li><a href="calender.html"><i class="fas fa-calendar-alt"></i>EconomicCalendar+Chart</a></li>
+        <li><a href="index.html#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" id="menuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
+  <!-- Calculator Content -->
   <div class="container">
     <div class="logo-container">
       <div class="logo-decoration"></div>
       <div class="logo-main">EJFXPRO</div>
       <div class="logo-sub">TRADE</div>
     </div>
-
     <div class="calculator">
       <div class="input-group">
         <label for="pair"><i class="fas fa-search"></i> Currency Pair</label>
@@ -397,7 +464,6 @@
         </div>
         <div class="error-message" id="pairError">Please select a valid currency pair</div>
       </div>
-
       <div class="input-group">
         <label for="pips"><i class="fas fa-arrow-trend-up"></i> Number of Pips</label>
         <div class="input-container">
@@ -406,7 +472,6 @@
         </div>
         <div class="error-message" id="pipsError">Please enter a valid number greater than 0</div>
       </div>
-
       <div class="input-group">
         <label for="volume"><i class="fas fa-weight-scale"></i> Volume (Lots)</label>
         <div class="input-container">
@@ -415,16 +480,13 @@
         </div>
         <div class="error-message" id="volumeError">Please enter a valid number greater than 0</div>
       </div>
-
       <button class="btn-calculate" id="calculate">
         <i class="fas fa-calculator"></i> Calculate Pip Value
       </button>
-
       <div class="result">
         <div class="result-title">PIP VALUE</div>
         <div class="value" id="result">$10.00</div>
       </div>
-
       <div class="explanation">
         <h3><i class="fas fa-info-circle"></i> How It's Calculated</h3>
         <p>Pip value is calculated based on:</p>
@@ -437,7 +499,16 @@
       </div>
     </div>
   </div>
-
+  <!-- Mobile menu toggle JS -->
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const navMenu = document.getElementById('navMenu').querySelector('ul');
+    menuBtn.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+  </script>
+  <!-- Calculator JS -->
   <script>
     // All available pairs with their display names
     const allPairs = [
@@ -500,79 +571,18 @@
       { value: "CAC40", display: "CAC40 (France)" },
       { value: "Nikkei225", display: "Nikkei225 (Japan)" }
     ];
-
-    // Pip values per standard lot (corrected calculations)
+    // Pip values per standard lot
     const pipValues = {
-      // Forex Pairs
-      "EUR/USD": 10,    // $10 per pip for 1 standard lot
-      "USD/JPY": 9.00,  // Approx $9 per pip for 1 standard lot (varies with JPY rate)
-      "GBP/USD": 10,
-      "AUD/USD": 10,
-      "USD/CAD": 10,
-      "USD/CHF": 10,
-      "NZD/USD": 10,
-      "EUR/GBP": 10,
-      "EUR/JPY": 9.50,
-      "GBP/JPY": 9.50,
-      "AUD/JPY": 9.00,
-      "EUR/AUD": 10,
-      "EUR/CHF": 10,
-      "AUD/NZD": 10,
-      "NZD/JPY": 9.00,
-      "GBP/AUD": 10,
-      "GBP/CAD": 10,
-      "EUR/NZD": 10,
-      "AUD/CAD": 10,
-      "GBP/CHF": 10,
-      "AUD/CHF": 10,
-      "EUR/CAD": 10,
-      "CAD/JPY": 9.00,
-      "GBP/NZD": 10,
-      "NZD/CAD": 10,
-      "EUR/SEK": 10,
-      "GBP/PLN": 10,
-      "EUR/PLN": 10,
-      "USD/NOK": 10,
-      "USD/SEK": 10,
-      "USD/DKK": 10,
-      "EUR/NOK": 10,
-      "NZD/CHF": 10,
-      "CHF/JPY": 9.00,
-      
-      // Metals
-      "XAU/USD": 10,    // $10 per pip for 1 standard lot (100 oz)
-      "XAG/USD": 50,    // $50 per pip for 1 standard lot (5,000 oz)
-      "XPT/USD": 10,    // $10 per pip for 1 standard lot (100 oz)
-      "XPD/USD": 10,    // $10 per pip for 1 standard lot (100 oz)
-      "XCU/USD": 10,    // $10 per pip for 1 standard lot (25,000 lbs)
-      "XZN/USD": 10,
-      "XNI/USD": 10,
-      "XPB/USD": 10,
-      
-      // Commodities Futures
-      "HG": 10,
-      "GC": 10,
-      "SI": 50,
-      "PL": 10,
-      
-      // Oil and Energy
-      "USOIL": 10,      // $10 per pip for 1 standard lot (1,000 barrels)
-      "BRENT": 10,
-      "NG": 10,
-      "HO": 10,
-      
-      // Indices
-      "US30": 1,        // $1 per pip for 1 contract
-      "US500": 50,      // $50 per pip for 1 contract
-      "NAS100": 20,     // $20 per pip for 1 contract
-      "NQ": 20,
-      "ES": 50,
-      "FTSE100": 10,
-      "DAX": 10,
-      "CAC40": 10,
-      "Nikkei225": 10
+      "EUR/USD": 10, "USD/JPY": 9.00, "GBP/USD": 10, "AUD/USD": 10, "USD/CAD": 10, "USD/CHF": 10, "NZD/USD": 10,
+      "EUR/GBP": 10, "EUR/JPY": 9.50, "GBP/JPY": 9.50, "AUD/JPY": 9.00, "EUR/AUD": 10, "EUR/CHF": 10, "AUD/NZD": 10,
+      "NZD/JPY": 9.00, "GBP/AUD": 10, "GBP/CAD": 10, "EUR/NZD": 10, "AUD/CAD": 10, "GBP/CHF": 10, "AUD/CHF": 10,
+      "EUR/CAD": 10, "CAD/JPY": 9.00, "GBP/NZD": 10, "NZD/CAD": 10, "EUR/SEK": 10, "GBP/PLN": 10, "EUR/PLN": 10,
+      "USD/NOK": 10, "USD/SEK": 10, "USD/DKK": 10, "EUR/NOK": 10, "NZD/CHF": 10, "CHF/JPY": 9.00,
+      "XAU/USD": 10, "XAG/USD": 50, "XPT/USD": 10, "XPD/USD": 10, "XCU/USD": 10, "XZN/USD": 10, "XNI/USD": 10, "XPB/USD": 10,
+      "HG": 10, "GC": 10, "SI": 50, "PL": 10,
+      "USOIL": 10, "BRENT": 10, "NG": 10, "HO": 10,
+      "US30": 1, "US500": 50, "NAS100": 20, "NQ": 20, "ES": 50, "FTSE100": 10, "DAX": 10, "CAC40": 10, "Nikkei225": 10
     };
-
     // DOM Elements
     const pairInput = document.getElementById("pair");
     const pairOptions = document.getElementById("pairOptions");
@@ -581,29 +591,24 @@
     const calculateBtn = document.getElementById("calculate");
     const resultElement = document.getElementById("result");
     const swapBtn = document.getElementById("swapPairs");
-
     // Error elements
     const pairError = document.getElementById("pairError");
     const pipsError = document.getElementById("pipsError");
     const volumeError = document.getElementById("volumeError");
-
     // Current selected pair
     let selectedPair = "EUR/USD";
-
     // Initialize calculator
     function init() {
       populatePairOptions();
       setupEventListeners();
       calculate();
     }
-
     // Populate pair options
     function populatePairOptions(filter = "") {
       pairOptions.innerHTML = "";
       const filteredPairs = allPairs.filter(pair => 
         pair.display.toLowerCase().includes(filter.toLowerCase())
       );
-
       filteredPairs.forEach(pair => {
         const option = document.createElement("div");
         option.className = "custom-select-option";
@@ -618,44 +623,33 @@
         });
         pairOptions.appendChild(option);
       });
-
       if (filteredPairs.length > 0) {
         pairOptions.style.display = "block";
       } else {
         pairOptions.style.display = "none";
       }
     }
-
     // Set up event listeners
     function setupEventListeners() {
       calculateBtn.addEventListener("click", calculate);
-      
-      // Pair input events
       pairInput.addEventListener("focus", () => {
         populatePairOptions();
       });
-      
       pairInput.addEventListener("input", (e) => {
         populatePairOptions(e.target.value);
       });
-      
       pairInput.addEventListener("blur", () => {
         setTimeout(() => {
           pairOptions.style.display = "none";
         }, 200);
       });
-      
-      // Other inputs
       pipsInput.addEventListener("input", validatePips);
       volumeInput.addEventListener("input", validateVolume);
       swapBtn.addEventListener("click", swapCurrencyPair);
-      
-      // Recalculate when any input changes
       [pipsInput, volumeInput].forEach(element => {
         element.addEventListener("change", calculate);
       });
     }
-
     // Validate currency pair
     function validatePair() {
       if (!pipValues[selectedPair]) {
@@ -667,7 +661,6 @@
       pairError.style.display = "none";
       return true;
     }
-
     // Validate pips
     function validatePips() {
       const pips = parseFloat(pipsInput.value);
@@ -687,7 +680,6 @@
       pipsError.style.display = "none";
       return true;
     }
-
     // Validate volume
     function validateVolume() {
       const volume = parseFloat(volumeInput.value);
@@ -707,14 +699,11 @@
       volumeError.style.display = "none";
       return true;
     }
-
     // Swap currency pair
     function swapCurrencyPair() {
       if (selectedPair && selectedPair.includes("/")) {
         const [base, quote] = selectedPair.split("/");
         const newPair = `${quote}/${base}`;
-        
-        // Find the matching pair in our list
         const foundPair = allPairs.find(p => p.value === newPair);
         if (foundPair) {
           selectedPair = foundPair.value;
@@ -724,28 +713,16 @@
         }
       }
     }
-
-    // Main calculation function - CORRECTED
+    // Main calculation function
     function calculate() {
-      // Validate inputs
       const isValid = validatePair() && validatePips() && validateVolume();
       if (!isValid) return;
-
-      // Get input values
       const pips = parseFloat(pipsInput.value);
       const volume = parseFloat(volumeInput.value);
-      
-      // Get pip value for selected pair
       const pipValuePerLot = pipValues[selectedPair] || 10;
-      
-      // Calculate total pip value
       const totalPipValue = pipValuePerLot * pips * volume;
-      
-      // Format results
       resultElement.textContent = `$${totalPipValue.toFixed(2)}`;
     }
-
-    // Initialize the calculator
     document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>

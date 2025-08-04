@@ -8,13 +8,10 @@
   <style>
     :root {
       --dark-bg: #0e0e0e;
-      --darker-bg: #080808;
       --card-bg: #141414;
       --accent-orange: #FF6600;
       --accent-orange-light: #ff8533;
       --accent-orange-dark: #e65c00;
-      --accent-green: #00cc66;
-      --accent-red: #ff3333;
       --text-light: #ffffff;
       --text-gray: #b0b0b0;
       --transition: all 0.3s ease;
@@ -30,28 +27,160 @@
       font-family: 'Segoe UI', 'Roboto', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      padding: 20px;
       text-align: center;
       position: relative;
     }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 20% 20%, rgba(255, 102, 0, 0.1) 0%, transparent 40%),
-                  radial-gradient(circle at 80% 80%, rgba(255, 102, 0, 0.1) 0%, transparent 40%);
-      z-index: -1;
-      pointer-events: none;
-    }
     .container {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 16px;
     }
-    /* Header & Logo Styles */
+    /* Overlay for mobile menu */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(15, 20, 30, 0.7);
+      z-index: 98;
+      transition: opacity 0.3s;
+    }
+    .menu-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+    /* Responsive Header/Menu Styles */
+    header.site-header {
+      background: rgba(15, 20, 30, 0.95);
+      border-bottom: 2px solid #ff6b00;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      margin-right: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-icon {
+      color: #ff6b00;
+      font-size: 2rem;
+      margin-right: 10px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+      animation: pulse 2s infinite;
+    }
+    .logo-text-menu {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(45deg, #ff6b00, #ffcc00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 2;
+      animation: logoGlow 3s infinite alternate;
+    }
+    nav {
+      flex-grow: 1;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    nav li {
+      margin-right: 1.5rem;
+    }
+    nav a {
+      color: #f0f4f8;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    nav a i {
+      margin-right: 8px;
+      font-size: 1.1rem;
+    }
+    nav a:hover {
+      background: rgba(255, 107, 0, 0.2);
+      color: #ff6b00;
+    }
+    nav a.active {
+      background: rgba(255, 107, 0, 0.25);
+      color: #ff6b00;
+      box-shadow: 0 4px 10px rgba(255, 107, 0, 0.2);
+    }
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #ff6b00;
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 101;
+    }
+    @media (max-width: 900px) {
+      header.site-header {
+        padding: 0 1rem;
+        height: 60px;
+      }
+      .logo-text-menu {
+        font-size: 1.2rem;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 260px;
+        height: 100vh;
+        background: rgba(15, 20, 30, 0.98);
+        z-index: 99;
+        transition: left 0.4s;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        padding-top: 60px;
+      }
+      nav.active {
+        left: 0;
+      }
+      nav ul {
+        flex-direction: column;
+        padding: 20px;
+      }
+      nav li {
+        margin: 0 0 1rem 0;
+        width: 100%;
+      }
+      nav a {
+        padding: 0.8rem 1.2rem;
+        font-size: 1.1rem;
+        border-radius: 12px;
+      }
+      .menu-btn {
+        display: block;
+        position: absolute;
+        right: 2rem;
+      }
+    }
+    /* Header & Logo Styles (Calendar) */
     .header {
       display: flex;
       flex-direction: column;
@@ -65,6 +194,7 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 15px;
+      flex-wrap: wrap;
     }
     .logo-e {
       position: relative;
@@ -157,7 +287,7 @@
       margin-right: 10px;
       font-size: 1.2rem;
     }
-    /* TradingView Chart Container */
+  /* TradingView Chart Container */
     .tradingview-widget-container {
       width: 100%;
       max-width: 1000px;
@@ -274,43 +404,27 @@
   </style>
 </head>
 <body>
-     
-      <!-- ✅ Small Back Button Style -->
-<style>
-  .back-btn {
-    display: inline-flex;
-    align-items: center;      /* center arrow + text */
-    gap: 6px;                 /* small space between arrow & text */
-    padding: 8px 18px;        /* smaller padding */
-    font-size: 14px;          /* smaller text */
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(45deg, #ff6600, #ff3300); /* flame gradient */
-    border: none;
-    border-radius: 30px;      /* rounded pill */
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    box-shadow: 0 3px 8px rgba(255, 102, 0, 0.4);
-    transition: all 0.3s ease;
-  }
-
-  .back-btn:hover {
-    transform: scale(1.05);   /* slight hover zoom */
-    box-shadow: 0 5px 12px rgba(255, 102, 0, 0.6);
-    background: linear-gradient(45deg, #ff4500, #ff2200); /* deeper orange */
-  }
-
-  .back-btn .arrow {
-    font-size: 18px; /* small arrow */
-    font-weight: bold;
-  }
-</style>
-
-<!-- ✅ Small Back Button -->
-<button class="back-btn" onclick="window.location.href='index.html'">
-  <span class="arrow">⬅</span> Back
-</button>
-
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <header class="site-header">
+    <div class="logo">
+      <i class="fas fa-chart-line logo-icon"></i>
+      <div class="logo-text-menu">EJFXPROTRADE</div>
+    </div>
+    <nav id="navMenu">
+      <ul>
+        <li><a href="index.html#home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="index.html#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
+        <li><a href="pipcalculator.html"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+        <li><a href="index.html#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
+        <li><a href="index.html#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
+        <li><a href="calender.html" class="active"><i class="fas fa-calendar-alt"></i>EconomicCalendar</a></li>
+        <li><a href="index.html#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+      </ul>
+    </nav>
+    <button class="menu-btn" id="menuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
   <div class="container">
     <!-- Header with animated logo -->
     <header class="header">
@@ -324,7 +438,6 @@
         </div>
       </div>
     </header>
-
     <!-- Button Group -->
     <div class="button-group">
       <button class="filter-btn active" onclick="showCalendar(event, 'today')">
@@ -334,7 +447,6 @@
         <i class="fas fa-fire"></i> HIGH IMPACT EVENTS
       </button>
     </div>
-
     <!-- Today News Calendar -->
     <div id="today" class="calendar-container active">
       <div class="calendar-widget-container">
@@ -352,25 +464,7 @@
         </script>
       </div>
     </div>
-
-    <!-- High Impact News Calendar -->
-    <div id="high" class="calendar-container">
-      <div class="calendar-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-        {
-          "width": "100%",
-          "height": "100%",
-          "colorTheme": "dark",
-          "isTransparent": false,
-          "locale": "en",
-          "importanceFilter": "1"
-        }
-        </script>
-      </div>
-    </div>
-
-    <!-- TradingView Dark Theme Live Chart -->
+       <!-- TradingView Dark Theme Live Chart -->
 <div class="tradingview-widget-container" style="width: 100%; height: 500px;">
   <div id="tradingview_chart"></div>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
@@ -391,13 +485,63 @@
     });
   </script>
 </div>
-
+    <!-- High Impact News Calendar -->
+    <div id="high" class="calendar-container">
+      <div class="calendar-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+        {
+          "width": "100%",
+          "height": "100%",
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "locale": "en",
+          "importanceFilter": "1"
+        }
+        </script>
+      </div>
+    </div>
+   
     <!-- Footer -->
     <footer class="footer">
       <p>© 2025 EJFXPROTRADE - All Rights Reserved | Real-time Economic Calendar & Market Analysis</p>
     </footer>
   </div>
-
+  <script>
+    function setupMobileMenu() {
+      const menuBtn = document.getElementById('menuBtn');
+      const navMenu = document.getElementById('navMenu');
+      const menuOverlay = document.getElementById('menuOverlay');
+      menuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        menuOverlay.classList.toggle('active');
+        if (navMenu.classList.contains('active')) {
+          menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+          document.body.style.overflow = 'hidden';
+        } else {
+          menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+          document.body.style.overflow = '';
+        }
+      });
+      // Close menu when clicking on links or overlay
+      const navLinks = navMenu.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('active');
+          menuOverlay.classList.remove('active');
+          menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+          document.body.style.overflow = '';
+        });
+      });
+      menuOverlay.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        menuOverlay.classList.remove('active');
+        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        document.body.style.overflow = '';
+      });
+    }
+    document.addEventListener('DOMContentLoaded', setupMobileMenu);
+  </script>
   <script>
     // Function to show calendar
     function showCalendar(event, id) {
@@ -405,25 +549,17 @@
       const containers = document.querySelectorAll('.calendar-container');
       containers.forEach(c => c.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-
-      // Update button states
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-
-      // Highlight active button
       const activeBtn = event.currentTarget;
       activeBtn.classList.add('active');
     }
-    
-    // Initialize TradingView widgets after page load
     window.addEventListener('load', function() {
-      // Refresh the calendar widgets to ensure proper sizing
       setTimeout(() => {
         const calendarWidgets = document.querySelectorAll('.tradingview-widget-container__widget');
         calendarWidgets.forEach(widget => {
           if (widget.innerHTML === '') {
-            // This forces the widget to re-render
             widget.innerHTML = '<div style="height:100%;width:100%"></div>';
           }
         });

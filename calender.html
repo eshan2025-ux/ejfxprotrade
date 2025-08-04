@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EJFXPROTRADE - Economic Calendar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --dark-bg: #0e0e0e;
+      --darker-bg: #080808;
+      --card-bg: #141414;
+      --accent-orange: #FF6600;
+      --accent-orange-light: #ff8533;
+      --accent-orange-dark: #e65c00;
+      --accent-green: #00cc66;
+      --accent-red: #ff3333;
+      --text-light: #ffffff;
+      --text-gray: #b0b0b0;
+      --transition: all 0.3s ease;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: radial-gradient(circle at center, #1a1a1a 0%, var(--dark-bg) 100%);
+      color: var(--text-light);
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 102, 0, 0.1) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 80%, rgba(255, 102, 0, 0.1) 0%, transparent 40%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    /* Header & Logo Styles */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding: 20px 0;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    .logo-e {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-orange-dark));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      box-shadow: 0 8px 25px rgba(255, 102, 0, 0.4);
+      animation: pulse 2s infinite, rotate 8s infinite linear;
+      transform-style: preserve-3d;
+      perspective: 500px;
+    }
+    .logo-e::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border: 3px solid rgba(255, 255, 255, 0.7);
+      border-radius: 6px;
+      transform: translateZ(20px);
+    }
+    .logo-e span {
+      font-size: 48px;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      transform: translateZ(30px);
+    }
+    .logo-text {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(to right, var(--accent-orange), var(--accent-orange-light), #ffd700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      animation: textGlow 2s infinite alternate;
+    }
+    .logo-subtitle {
+      color: var(--accent-orange);
+      font-size: 1.5rem;
+      margin-top: 10px;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      animation: subtitlePulse 3s infinite alternate;
+    }
+    /* Button Group */
+    .button-group {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .filter-btn {
+      background: linear-gradient(to bottom, var(--card-bg), #0f0f0f);
+      border: 1px solid var(--accent-orange);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      min-width: 200px;
+      justify-content: center;
+    }
+    .filter-btn:hover {
+      background: linear-gradient(to bottom, var(--accent-orange), var(--accent-orange-dark));
+      color: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4);
+    }
+    .filter-btn.active {
+      background: linear-gradient(to bottom, var(--accent-orange), var(--accent-orange-dark));
+      color: #000;
+      box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4);
+    }
+    .filter-btn i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    /* TradingView Chart Container */
+    .tradingview-widget-container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 40px auto;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 102, 0, 0.2);
+      height: 500px;
+    }
+    /* Calendar Container */
+    .calendar-container {
+      display: none;
+      background: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 102, 0, 0.2);
+      margin: 0 auto;
+      max-width: 1000px;
+      height: 600px; /* Increased height for better calendar display */
+    }
+    .calendar-container.active {
+      display: block;
+      animation: fadeIn 0.8s ease;
+    }
+    /* Calendar widget container */
+    .calendar-widget-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .calendar-widget-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      padding: 20px;
+      border-top: 1px solid rgba(255, 102, 0, 0.1);
+    }
+    /* Animations */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 102, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+    }
+    @keyframes rotate {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 5px rgba(255, 102, 0, 0.5); }
+      100% { text-shadow: 0 0 20px rgba(255, 102, 0, 0.8), 0 0 30px rgba(255, 102, 0, 0.6); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes subtitlePulse {
+      0% { opacity: 0.7; text-shadow: 0 0 5px rgba(255, 102, 0, 0.3); }
+      100% { opacity: 1; text-shadow: 0 0 15px rgba(255, 102, 0, 0.7); }
+    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .logo-container {
+        flex-direction: column;
+        margin-bottom: 20px;
+      }
+      .logo-e {
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 70px;
+        height: 70px;
+      }
+      .logo-text {
+        font-size: 2.2rem;
+      }
+      .logo-subtitle {
+        font-size: 1.2rem;
+      }
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      .filter-btn {
+        width: 100%;
+        max-width: 300px;
+        padding: 12px 20px;
+      }
+      .tradingview-widget-container {
+        height: 400px;
+      }
+      .calendar-container {
+        height: 500px;
+      }
+    }
+    @media (max-width: 480px) {
+      .calendar-container {
+        height: 450px;
+      }
+      .tradingview-widget-container {
+        height: 350px;
+      }
+    }
+  </style>
+</head>
+<body>
+     
+      <!-- ✅ Small Back Button Style -->
+<style>
+  .back-btn {
+    display: inline-flex;
+    align-items: center;      /* center arrow + text */
+    gap: 6px;                 /* small space between arrow & text */
+    padding: 8px 18px;        /* smaller padding */
+    font-size: 14px;          /* smaller text */
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #ff6600, #ff3300); /* flame gradient */
+    border: none;
+    border-radius: 30px;      /* rounded pill */
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 8px rgba(255, 102, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .back-btn:hover {
+    transform: scale(1.05);   /* slight hover zoom */
+    box-shadow: 0 5px 12px rgba(255, 102, 0, 0.6);
+    background: linear-gradient(45deg, #ff4500, #ff2200); /* deeper orange */
+  }
+
+  .back-btn .arrow {
+    font-size: 18px; /* small arrow */
+    font-weight: bold;
+  }
+</style>
+
+<!-- ✅ Small Back Button -->
+<button class="back-btn" onclick="window.location.href='index.html'">
+  <span class="arrow">⬅</span> Back
+</button>
+
+  <div class="container">
+    <!-- Header with animated logo -->
+    <header class="header">
+      <div class="logo-container">
+        <div class="logo-e">
+          <span>E</span>
+        </div>
+        <div>
+          <h1 class="logo-text">EJFXPROTRADE</h1>
+          <p class="logo-subtitle">REAL-TIME ECONOMIC CALENDAR</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Button Group -->
+    <div class="button-group">
+      <button class="filter-btn active" onclick="showCalendar(event, 'today')">
+        <i class="fas fa-calendar-day"></i> TODAY'S NEWS
+      </button>
+      <button class="filter-btn" onclick="showCalendar(event, 'high')">
+        <i class="fas fa-fire"></i> HIGH IMPACT EVENTS
+      </button>
+    </div>
+
+    <!-- Today News Calendar -->
+    <div id="today" class="calendar-container active">
+      <div class="calendar-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+        {
+          "width": "100%",
+          "height": "100%",
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "locale": "en",
+          "dateRange": "today",
+          "importanceFilter": "-1,0,1"
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- High Impact News Calendar -->
+    <div id="high" class="calendar-container">
+      <div class="calendar-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+        {
+          "width": "100%",
+          "height": "100%",
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "locale": "en",
+          "importanceFilter": "1"
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- TradingView Dark Theme Live Chart -->
+<div class="tradingview-widget-container" style="width: 100%; height: 500px;">
+  <div id="tradingview_chart"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    new TradingView.widget({
+      "width": "100%",          // Full width
+      "height": 500,            // Chart height
+      "symbol": "XAUUSD",       // Default market (change to BTCUSD, XAUUSD, etc.)
+      "interval": "15",         // Timeframe (1, 5, 15, 60, D)
+      "timezone": "Etc/UTC",
+      "theme": "dark",          // ✅ Dark theme
+      "style": "1",             // 1 = candlestick
+      "locale": "en",
+      "toolbar_bg": "#1e1e1e",  // Toolbar background dark
+      "enable_publishing": false,
+      "allow_symbol_change": true,
+      "container_id": "tradingview_chart"
+    });
+  </script>
+</div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2025 EJFXPROTRADE - All Rights Reserved | Real-time Economic Calendar & Market Analysis</p>
+    </footer>
+  </div>
+
+  <script>
+    // Function to show calendar
+    function showCalendar(event, id) {
+      event.preventDefault();
+      const containers = document.querySelectorAll('.calendar-container');
+      containers.forEach(c => c.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      // Update button states
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Highlight active button
+      const activeBtn = event.currentTarget;
+      activeBtn.classList.add('active');
+    }
+    
+    // Initialize TradingView widgets after page load
+    window.addEventListener('load', function() {
+      // Refresh the calendar widgets to ensure proper sizing
+      setTimeout(() => {
+        const calendarWidgets = document.querySelectorAll('.tradingview-widget-container__widget');
+        calendarWidgets.forEach(widget => {
+          if (widget.innerHTML === '') {
+            // This forces the widget to re-render
+            widget.innerHTML = '<div style="height:100%;width:100%"></div>';
+          }
+        });
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

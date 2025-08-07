@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Forex Chart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #ff5900;
+      --primary-dark: #e06d00;
+      --primary-light: #ff5833;
+      --dark-bg: #121212;
+      --text-primary: #ffffff;
+      --text-secondary: #bbbbbb;
+    }
+
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+    }
+
+    body {
+      background: #181818;
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      height: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #__main-content {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    /* Animated background elements */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+      opacity: 0.1;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.1;
+      }
+      50% {
+        opacity: 0.15;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0.1;
+      }
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      padding: 1.2rem;
+      text-align: center;
+      letter-spacing: 1.5px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(255, 119, 0, 0.3);
+      animation: headerEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 10;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes headerEntry {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.8rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .logo i {
+      color: #fff;
+    }
+
+    .chart-container {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
+      align-items: stretch;
+      padding: 0;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .tradingview-widget-container {
+      flex: 1 1 auto;
+      height: 100%;
+      width: 100%;
+      background: #222;
+      border-top: 2px solid #ff7700;
+      animation: slideUp 0.8s ease-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #tradingview_chart {
+      flex: 1 1 auto;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    .footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* Loading animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #181818;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+
+    .loader {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      border: 3px solid;
+      border-color: var(--primary) var(--primary) transparent transparent;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+    }
+
+    .loader::after,
+    .loader::before {
+      content: '';
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      border: 3px solid;
+      border-color: transparent transparent #ff7700 #ff7700;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation: rotationBack 0.5s linear infinite;
+      transform-origin: center center;
+    }
+
+    .loader::before {
+      width: 20px;
+      height: 20px;
+      border-color: var(--primary) var(--primary) transparent transparent;
+      animation: rotation 1.5s linear infinite;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes rotationBack {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(-360deg);
+      }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .header {
+        font-size: 1.2rem;
+        padding: 1rem;
+      }
+      .logo {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .header-content { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading animation -->
+  <div class="loading-overlay" id="loading">
+    <div class="loader"></div>
+  </div>
+  
+  <!-- Animated background particles -->
+  <div class="bg-particles" id="particles"></div>
+  
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>FOREX PRO CHART</span>
+      </div>
+    </div>
+  </div>
+  
+  <div id="__main-content">
+    <div class="chart-container">
+      <div class="tradingview-widget-container">
+        <div id="tradingview_chart"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>Live Forex Chart &copy; 2025 | Real-time market data | <a href="#">Terms</a> | <a href="#">Privacy</a></p>
+    <p>Disclaimer: Trading forex carries a high level of risk and may not be suitable for all investors.</p>
+  </div>
+
+  <script>
+    // Create animated background particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const particleCount = 12;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        const size = Math.random() * 120 + 30;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 15;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDelay = `${delay}s`;
+        container.appendChild(particle);
+      }
+    }
+    
+    // Initialize TradingView chart
+    function initChart() {
+      if (typeof TradingView !== 'undefined') {
+        new TradingView.widget({
+          "width": "100%",
+          "height": "100%",
+          "symbol": "OANDA:XAUUSD",
+          "interval": "60",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "toolbar_bg": "#181818",
+          "enable_publishing": false,
+          "hide_top_toolbar": false,
+          "hide_legend": false,
+          "save_image": true,
+          "container_id": "tradingview_chart",
+          "studies": [
+            "MASimple@tv-basicstudies",
+            "RSI@tv-basicstudies",
+            "Volume@tv-basicstudies"
+          ],
+          "allow_symbol_change": true
+        });
+        setTimeout(() => {
+          document.getElementById('loading').style.opacity = '0';
+          document.getElementById('loading').style.visibility = 'hidden';
+        }, 1000);
+      } else {
+        setTimeout(initChart, 200);
+      }
+    }
+    
+    // Responsive chart height
+    function resizeChart() {
+      const header = document.querySelector('.header');
+      const footer = document.querySelector('.footer');
+      const mainContent = document.getElementById('__main-content');
+      const chartContainer = document.querySelector('.chart-container');
+      const tradingviewWidget = document.querySelector('.tradingview-widget-container');
+      const chartDiv = document.getElementById('tradingview_chart');
+      let headerHeight = header ? header.offsetHeight : 0;
+      let footerHeight = footer ? footer.offsetHeight : 0;
+      let availableHeight = window.innerHeight - headerHeight - footerHeight;
+
+      mainContent.style.minHeight = availableHeight + 'px';
+      mainContent.style.height = availableHeight + 'px';
+      chartContainer.style.height = '100%';
+      tradingviewWidget.style.height = '100%';
+      chartDiv.style.height = '100%';
+      chartDiv.style.width = '100%';
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      resizeChart();
+      initChart();
+    });
+    
+    window.addEventListener('resize', resizeChart);
+    window.addEventListener('load', initChart);
+  </script>
+</body>
+</html>

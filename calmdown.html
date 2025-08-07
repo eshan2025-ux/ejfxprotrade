@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Calm Down - FX Stress Relief</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            max-height: 100vh;
+            overflow: hidden; /* Prevent any scrolling! */
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c18, #1a1a2e, #0f1123);
+            color: #f5f5f5;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Prevent vertical and horizontal scroll */
+            position: relative;
+            padding: 20px;
+        }
+
+        .bubble, .fx-line {
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,140,0,0.15) 0%, rgba(255,140,0,0) 70%);
+            animation: float 15s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .fx-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.6), transparent);
+            animation: linePulse 8s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        .header {
+            margin-bottom: 60px;
+            animation: fadeInDown 1.2s ease-out;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff8c00, #ffaa33, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #bbb;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            margin: 50px 0;
+        }
+
+        .btn {
+            position: relative;
+            width: clamp(140px, 28vw, 320px);
+            height: clamp(140px, 28vw, 320px);
+            min-width: 120px;
+            min-height: 120px;
+            max-width: 360px;
+            max-height: 360px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.38);
+            animation: pulse 4s infinite;
+            background: none;
+            border: none;
+            padding: 0;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.96) rotate(-2deg);
+        }
+
+        .btn:hover {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                rgba(255, 140, 0, 0.8),
+                rgba(255, 140, 0, 0.6),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border-radius: 50%;
+        }
+
+        .btn-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            padding: 18% 0 15% 0;
+            gap: 0.2em;
+        }
+
+        .btn-icon, .btn-emoji {
+            font-size: clamp(2.1rem, 4vw, 3.5rem);
+            line-height: 1;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .btn-icon {
+            color: #ff8c00;
+            text-shadow: 0 0 12px rgba(255,140,0,0.55);
+            margin-bottom: 0.2em;
+        }
+
+        .btn-title {
+            margin: 0.25em 0 0.10em 0;
+            font-size: clamp(1.15rem, 2.2vw, 2.1rem);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, #ff8c00, #ffaa33);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 8px rgba(255,140,0,0.4);
+        }
+
+        .btn-emoji {
+            filter: drop-shadow(0 0 3px rgba(255,255,255,0.4));
+            margin-top: 0.10em;
+        }
+
+        .btn:hover .btn-icon,
+        .btn:focus .btn-icon {
+            color: #ffaa33;
+            transform: scale(1.11) rotate(8deg);
+        }
+
+        .btn:hover .btn-emoji,
+        .btn:focus .btn-emoji {
+            transform: scale(1.12);
+            filter: drop-shadow(0 0 10px rgba(255,140,0,0.8));
+        }
+
+        .lowerloss { animation-delay: 0s; }
+        .highloss { animation-delay: 0.5s; }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 140, 0, 0.3); }
+            50% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 50px rgba(255, 140, 0, 0.6); }
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(10px) translateX(-20px); }
+            75% { transform: translateY(-30px) translateX(-10px); }
+        }
+        @keyframes linePulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        .quote {
+            margin-top: 40px;
+            font-size: 1.4rem;
+            color: #aaa;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+            animation: fadeIn 2s ease-out;
+            line-height: 1.6;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-left: 4px solid #ff8c00;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .footer {
+            margin-top: 50px;
+            color: #666;
+            font-size: 1rem;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1100px) {
+            .buttons-container { gap: 36px; }
+            .btn { width: 270px; height: 270px; }
+            h1 { font-size: 3rem; }
+        }
+        @media (max-width: 900px) {
+            .buttons-container { gap: 25px; }
+            .btn { width: 220px; height: 220px; }
+            h1 { font-size: 2.4rem; }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            h1 { font-size: 2rem; margin-bottom: 6px; }
+            .subtitle { font-size: 1.12rem; max-width: 98%; }
+            .btn { width: 170px; height: 170px; }
+            .btn-title { font-size: 1.3rem; }
+            .btn-icon { font-size: 2.2rem; }
+            .btn-emoji { font-size: 2rem; }
+            .quote { font-size: 1rem; padding: 10px; }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 0; }
+            .buttons-container {
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+            }
+            .btn {
+                width: clamp(95px, 60vw, 180px);
+                height: clamp(95px, 60vw, 180px);
+            }
+            .btn-content {
+                padding: 10% 0 8% 0;
+            }
+            h1 { font-size: 1.55rem; }
+            .subtitle { font-size: 0.99rem; }
+        }
+        @media (max-width: 420px) {
+            h1 { font-size: 1.15rem; }
+            .subtitle, .footer { font-size: 0.87rem; }
+            .btn { max-width: 160px; max-height: 160px; }
+            .quote { font-size: 0.85rem; padding: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bubbles-container"></div>
+    <div class="fx-lines-container"></div>
+    <div class="container">
+        <div class="header">
+            <h1>CALM DOWN</h1>
+            <p class="subtitle">Select your stress relief option to regain focus and emotional balance</p>
+        </div>
+        <div class="buttons-container">
+            <div class="btn lowerloss" tabindex="0">
+                <div class="btn-content">
+                    <div class="btn-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div class="btn-title">LOWER LOSS</div>
+                    <div class="btn-emoji">😐</div>
+                </div>
+            </div>
+            <div class="btn highloss" tabindex="0">
+                <div class="btn-content">
+                    <div class="btn-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="btn-title">HIGH LOSS</div>
+                    <div class="btn-emoji">😭</div>
+                </div>
+            </div>
+        </div>
+        <div class="quote">
+            "The stock market is a device for transferring money from the impatient to the patient." - Warren Buffett
+        </div>
+        <div class="footer">
+            <p>FX Calm Down Platform • Take a break, recharge, and return with clarity</p>
+        </div>
+    </div>
+    <script>
+        // Prevent scrolling by keyboard and mouse/touch
+        window.addEventListener('scroll', function(e) {
+            window.scrollTo(0, 0);
+        });
+
+        // Prevent mobile overscroll bounce
+        document.body.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        // Create floating bubbles for background
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.querySelector('body');
+            const bubbleCount = window.innerWidth < 500 ? 6 : 15;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.random() * 140 + 14;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.top = `${Math.random() * 100}%`;
+                const duration = Math.random() * 20 + 10;
+                bubble.style.animationDuration = `${duration}s`;
+                const delay = Math.random() * 5;
+                bubble.style.animationDelay = `${delay}s`;
+                body.appendChild(bubble);
+            }
+            const lineCount = window.innerWidth < 500 ? 3 : 10;
+            for (let i = 0; i < lineCount; i++) {
+                const line = document.createElement('div');
+                line.classList.add('fx-line');
+                const width = Math.random() * 180 + 70;
+                line.style.width = `${width}px`;
+                line.style.left = `${Math.random() * 100}%`;
+                line.style.top = `${Math.random() * 100}%`;
+                const rotation = Math.random() * 360;
+                line.style.transform = `rotate(${rotation}deg)`;
+                const duration = Math.random() * 10 + 5;
+                line.style.animationDuration = `${duration}s`;
+                const delay = Math.random() * 3;
+                line.style.animationDelay = `${delay}s`;
+                body.appendChild(line);
+            }
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const ripple = document.createElement('div');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.width = '100%';
+                    ripple.style.height = '100%';
+                    ripple.style.background = 'radial-gradient(circle, rgba(255,140,0,0.4) 0%, rgba(255,140,0,0) 70%)';
+                    ripple.style.top = '0';
+                    ripple.style.left = '0';
+                    ripple.style.animation = 'pulse 0.8s ease-out';
+                    this.appendChild(ripple);
+                    setTimeout(() => { ripple.remove(); }, 800);
+                    const isLowerLoss = this.classList.contains('lowerloss');
+                    const message = isLowerLoss ?
+                        "Starting Lower Loss calming session..." :
+                        "Starting High Loss calming session...";
+                    const notification = document.createElement('div');
+                    notification.textContent = message;
+                    notification.style.position = 'fixed';
+                    notification.style.bottom = '30px';
+                    notification.style.left = '50%';
+                    notification.style.transform = 'translateX(-50%)';
+                    notification.style.background = 'rgba(255, 140, 0, 0.93)';
+                    notification.style.color = '#fff';
+                    notification.style.padding = '13px 22px';
+                    notification.style.borderRadius = '50px';
+                    notification.style.zIndex = '1000';
+                    notification.style.fontWeight = 'bold';
+                    notification.style.boxShadow = '0 5px 25px rgba(0,0,0,0.22)';
+                    notification.style.animation = 'fadeInUp 0.5s ease-out';
+                    notification.style.fontSize = '1.1rem';
+                    document.body.appendChild(notification);
+                    setTimeout(() => {
+                        notification.style.animation = 'fadeOut 0.5s ease-out';
+                        setTimeout(() => { notification.remove(); }, 500);
+                    }, 2200);
+                });
+            });
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                }
+                @keyframes fadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

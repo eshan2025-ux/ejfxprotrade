@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJFXPROTRADE - Professional Forex Trading</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --primary-dark: #e05a00;
+            --primary-light: #ff8b33;
+            --dark: #0a0e17;
+            --darker: #06090f;
+            --card-bg: #131a2d;
+            --light: #f0f4f8;
+            --gray: #8a94a6;
+            --success: #00e676;
+            --danger: #ff3d71;
+            --card-radius: 16px;
+            --glow: 0 0 15px rgba(255, 107, 0, 0.6);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: linear-gradient(135deg, #0c1220 0%, #0a0e17 100%);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        header {
+            background: rgba(15, 20, 30, 0.95);
+            border-bottom: 2px solid var(--primary);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 2rem;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-right: 10px;
+            position: relative;
+            z-index: 2;
+            text-shadow: var(--glow);
+            animation: pulse 2s infinite;
+        }
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), #ffcc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+            animation: logoGlow 3s infinite alternate;
+        }
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0) 70%);
+            animation: rotate 15s linear infinite;
+            z-index: 1;
+        }
+        nav {
+            flex-grow: 1;
+            transition: left 0.4s;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav li {
+            margin-right: 1.5rem;
+        }
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        nav a i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        nav a:hover, nav a.active {
+            background: rgba(255, 107, 0, 0.2);
+            color: var(--primary);
+        }
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+        /* Sidebar menu for mobile */
+        @media (max-width: 860px) {
+            .menu-btn {
+                display: block;
+                position: absolute;
+                right: 2rem;
+            }
+            nav {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 260px;
+                height: 100vh;
+                background: rgba(15, 20, 30, 0.98);
+                z-index: 99;
+                transition: all 0.4s cubic-bezier(.77,0,.18,1);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+                padding-top: 80px;
+            }
+            nav.active {left: 0;}
+            nav ul {flex-direction: column; padding: 20px;}
+            nav li {margin: 0 0 1rem 0; width: 100%;}
+            nav a {padding: 0.8rem 1.2rem; font-size: 1.1rem; border-radius: 12px;}
+        }
+        /* Always show all menu items, no display: none at any breakpoint */
+        /* HERO */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="3" fill="%23ff6b0033"/><circle cx="120" cy="90" r="2" fill="%23ff6b0022"/><circle cx="30" cy="150" r="4" fill="%23ff6b0022"/><circle cx="180" cy="30" r="3" fill="%23ff6b0033"/><circle cx="70" cy="180" r="2" fill="%23ff6b0022"/><circle cx="160" cy="120" r="4" fill="%23ff6b0022"/></svg>');
+            background-size: 200px;
+            opacity: 0.6;
+            animation: float 25s linear infinite;
+            z-index: -1;
+        }
+        .hero-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .hero h1 span { color: var(--primary); text-shadow: var(--glow);}
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--gray);
+            max-width: 600px;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: var(--darker);
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary);}
+        .btn-outline:hover {background: var(--primary); color: var(--darker);}
+        /* TradingView Widget Container */
+        .tradingview-container, .tradingview-widget-container {
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            margin: 0 auto;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .tradingview-container {height: 400px;}
+        .tradingview-widget-container {height: 100%;}
+        /* Tools Section */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        .section-title h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary), #ffcc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding-bottom: 15px;
+        }
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            box-shadow: var(--glow);
+        }
+        .section-title p {
+            max-width: 700px;
+            margin: 1rem auto 0;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 107, 0, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .tool-card:hover::before { transform: scaleX(1);}
+        .tool-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-shadow: var(--glow);
+        }
+        .tool-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+        .tool-card p {color: var(--gray); margin-bottom: 20px;}
+        /* Market Section */
+        .market-section {
+            background: rgba(10, 15, 25, 0.7);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            margin: 4rem auto;
+            max-width: 1200px;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .market-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .market-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), #ffcc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .market-header p {color: var(--gray); max-width: 700px; margin: 0 auto;}
+        .tradingview-market-container {
+            background: var(--card-bg);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            padding: 15px;
+            height: 720px;
+            width: 100%;
+            margin: 0 auto;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        /* Market Analysis Section */
+        .market-analysis-section {
+            background: rgba(10, 15, 25, 0.7);
+            border-radius: var(--card-radius);
+            padding: 3rem 2rem;
+            margin: 4rem auto;
+            max-width: 1200px;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .market-analysis-section .market-header {margin-bottom: 3rem;}
+        .analysis-widgets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            justify-content: center;
+        }
+        .analysis-card {
+            background: #121212;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .analysis-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .analysis-card h3 i {
+            font-size: 1.5rem;
+            text-shadow: var(--glow);
+        }
+        .tradingview-widget-container {height: 300px; width: 100%; border-radius: var(--card-radius);}
+        /* Social Media Icons */
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .social-icon {
+            display: flex; align-items: center; justify-content: center;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .social-icon::before {
+            content: '';
+            position: absolute; width: 100%; height: 100%;
+            background: var(--primary); transform: scale(0);
+            border-radius: 50%; transition: transform 0.3s ease; z-index: -1;
+        }
+        .social-icon:hover::before {transform: scale(1.1);}
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
+        }
+        .social-icon.twitter {color: #1DA1F2;}
+        .social-icon.telegram {color: #0088cc;}
+        .social-icon.twitter:hover, .social-icon.telegram:hover {color: var(--darker);}
+        .social-icon span {
+            position: absolute; bottom: -30px; font-size: 0.9rem; opacity: 0;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .social-icon:hover span {bottom: -25px; opacity: 1;}
+        /* Footer */
+        footer {
+            background: rgba(10, 15, 25, 0.95);
+            border-top: 1px solid rgba(255, 107, 0, 0.2);
+            padding: 4rem 2rem 2rem;
+            border-radius: 16px 16px 0 0;
+            margin-top: 4rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-col h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        .footer-col p, .footer-col li {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .footer-col ul {list-style: none;}
+        .footer-col a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: block; padding: 5px 0;
+        }
+        .footer-col a:hover {color: var(--primary);}
+        .copyright {
+            text-align: center;
+            padding: 2rem 0 0;
+            color: var(--gray);
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 2rem;
+            font-size: 0.9rem;
+        }
+        /* Chat Button & Widget */
+        .chat-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 9999;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            width: 62px;
+            height: 62px;
+            box-shadow: 0 6px 24px rgba(255,107,0,0.4);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: background 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .chat-btn:hover {background: var(--primary-dark); transform: scale(1.07);}
+        .chat-widget {
+            position: fixed;
+            bottom: 108px;
+            right: 32px;
+            width: 340px;
+            max-width: 95vw;
+            height: 480px;
+            background: #181c29;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.6);
+            border-radius: 20px;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+            animation: fadeIn 0.2s;
+        }
+        .chat-widget.active {display: flex;}
+        .chat-header {
+            background: var(--primary);
+            color: #fff;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chat-header i {margin-right: 8px;}
+        .chat-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        .chat-body {
+            flex: 1 1 auto;
+            padding: 18px;
+            overflow-y: auto;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        .chat-footer {
+            padding: 10px 18px;
+            background: #131a2d;
+            border-top: 1px solid #222;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-footer input {
+            flex: 1;
+            border-radius: 18px;
+            background: #20243a;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            outline: none;
+            font-size: 1rem;
+        }
+        .chat-footer button {
+            background: var(--primary);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-footer button:hover {background: var(--primary-dark);}
+        .chat-message {margin-bottom: 12px; padding: 9px 15px; border-radius: 16px; background: #23294a; width: fit-content; max-width: 90%;}
+        .chat-message.user {background: var(--primary); color: #fff; margin-left: auto; text-align: right;}
+        .chat-message.ai {background: #23294a; color: #fff; margin-right: auto;}
+        /* Animations */
+        @keyframes fadeIn {from { opacity: 0; } to { opacity: 1; }}
+        @keyframes fadeInUp {from {opacity: 0; transform: translateY(30px);} to {opacity: 1; transform: translateY(0);}}
+        @keyframes rotate {0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);}}
+        @keyframes logoGlow {0% { text-shadow: 0 0 5px rgba(255, 107, 0, 0.5);} 100% { text-shadow: 0 0 20px rgba(255, 107, 0, 0.8);}}
+        @keyframes pulse {0% { transform: scale(1);} 50% { transform: scale(1.1);} 100% { transform: scale(1);}}
+        @keyframes float {0% { background-position: 0 0;} 100% { background-position: 200px 200px;}
+        }
+        @media (max-width: 1200px) {
+            .hero h1 {font-size: 2.8rem;}
+            .section-title h2 {font-size: 2.2rem;}
+        }
+        @media (max-width: 992px) {
+            nav li {margin-right: 1rem;}
+            nav a {padding: 0.6rem 1rem; font-size: 0.9rem;}
+        }
+        @media (max-width: 768px) {
+            .hero {padding: 1rem; padding-top: 30px;}
+            .hero h1 {font-size: 2.3rem; text-align: center;}
+            .hero-content {padding: 1rem; text-align: center;}
+            .hero p {margin: 0 auto 2rem; text-align: center;}
+            .hero-btns {flex-direction: column; align-items: center;}
+            .btn {margin-right: 0; width: 100%; max-width: 300px;}
+            .hero-image {padding: 1rem;}
+            .section {padding: 3rem 1rem;}
+            .section-title {margin-bottom: 2.5rem;}
+            .section-title h2 {font-size: 2rem;}
+            .social-icons {justify-content: center;}
+            .tools-grid {grid-template-columns: 1fr;}
+            .tradingview-container {margin-top: 2rem; height: 350px;}
+            .tradingview-market-container {height: 500px;}
+            .footer-grid {grid-template-columns: 1fr; gap: 30px;}
+            .chat-widget {width: 98vw; height: 60vh; right: 1vw; bottom: 78px; border-radius: 12px;}
+            .chat-btn {right: 12px; bottom: 12px;}
+        }
+        @media (max-width: 480px) {
+            .logo-text {font-size: 1.3rem;}
+            .hero h1 {font-size: 2rem;}
+            .hero p {font-size: 1.1rem;}
+            .tradingview-container {height: 320px;}
+            .tradingview-market-container {height: 400px;}
+            .social-icon {width: 50px; height: 50px; font-size: 1.5rem;}
+            .social-icon span {font-size: 0.8rem;}
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-line logo-icon"></i>
+            <div class="logo-text">EJFXPROTRADE</div>
+        </div>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
+                <li><a href="pipcalculator.html"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+                <li><a href="chart.html"><i class="fas fa-chart-area"></i> Chart</a></li>
+                <li><a href="#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
+                <li><a href="#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
+                <li><a href="calender.html"><i class="fas fa-calendar-alt"></i> EconomicCalendar</a></li>
+                <li><a href="#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+                <li><a href="comedown.html"><i class="fas fa-level-down-alt"></i> Come Down</a></li>
+            </ul>
+        </nav>
+        <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Advanced <span>Forex Trading</span> Platform with AI Insights</h1>
+                <p>EJFXPROTRADE provides professional traders with cutting-edge tools, real-time market analysis, and AI-powered trading insights to maximize profitability in the forex market.</p>
+                <div class="hero-btns">
+                    <a href="#tools" class="btn">Explore Tools</a>
+                    <a href="#market" class="btn btn-outline">Live Market Data</a>
+                </div>
+                <!-- Social Media Icons -->
+                <div class="social-icons">
+                    <div class="social-icon twitter" onclick="window.open('https://x.com/ejfxprotrade?t=AR0dJg9UUZ6911-7uNgTiA&s=09', '_blank')">
+                        <i class="fab fa-twitter"></i>
+                        <span>Follow on Twitter</span>
+                    </div>
+                    <div class="social-icon telegram" onclick="window.open('https://t.me/ejfxprotrade', '_blank')">
+                        <i class="fab fa-telegram"></i>
+                        <span>Join Telegram</span>
+                    </div>
+                </div>
+            </div>
+            <!-- TradingView Dark Theme Live Price Ticker -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {
+                    "symbols": [
+                        { "proName": "FX:EURUSD", "title": "EUR/USD" },
+                        { "proName": "FX:GBPUSD", "title": "GBP/USD" },
+                        { "proName": "FX:USDJPY", "title": "USD/JPY" },
+                        { "proName": "FX:AUDUSD", "title": "AUD/USD" },
+                        { "proName": "FX:USDCAD", "title": "USD/CAD" },
+                        { "proName": "OANDA:XAUUSD", "title": "Gold" },
+                        { "proName": "OANDA:XAGUSD", "title": "Silver" },
+                        { "proName": "INDEX:DXY", "title": "US Dollar Index" },
+                        { "proName": "INDEX:SPX", "title": "S&P 500" },
+                        { "proName": "INDEX:DEU40", "title": "German DAX" }
+                    ],
+                    "colorTheme": "dark",
+                    "isTransparent": false,
+                    "displayMode": "regular",
+                    "locale": "en"
+                }
+                </script>
+            </div>
+        </div>
+    </section>
+    <!-- Tools Section -->
+    <section class="section" id="tools">
+        <div class="section-title">
+            <h2>Trading Tools</h2>
+            <p>Powerful tools designed to enhance your trading experience and improve decision-making</p>
+        </div>
+        <div class="tools-grid">
+            <div class="tool-card">
+                <i class="fas fa-calculator tool-icon"></i>
+                <h3>Pip Calculator</h3>
+                <p>Calculate pip values for any currency pair with precision based on your position size.</p>
+                <a href="pipcalculator.html" class="btn">Use Tool</a>
+            </div>
+            <div class="tool-card">
+                <i class="fas fa-shield-alt tool-icon"></i>
+                <h3>Risk Management</h3>
+                <p>Set risk parameters and calculate optimal position sizes for every trade.</p>
+                <a href="#" class="btn">Use Tool</a>
+            </div>
+            <div class="tool-card">
+                <i class="fas fa-brain tool-icon"></i>
+                <h3>Trader Psychology</h3>
+                <p>Monitor your trading mindset and emotional state for better decisions.</p>
+                <a href="#" class="btn">Use Tool</a>
+            </div>
+        </div>
+    </section>
+    <!-- Market Section with TradingView -->
+    <section class="market-section" id="market">
+        <div class="market-header">
+            <h2>Live Market Data</h2>
+            <p>Real-time market data and insights to help you make informed trading decisions</p>
+        </div>
+        <div class="tradingview-market-container">
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <div class="tradingview-widget-copyright">
+                    <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+                        <span class="blue-text">Track all markets on TradingView</span>
+                    </a>
+                </div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+                {
+                    "colorTheme": "dark",
+                    "dateRange": "1D",
+                    "showChart": true,
+                    "locale": "en",
+                    "width": "100%",
+                    "height": "100%",
+                    "isTransparent": false,
+                    "showSymbolLogo": true,
+                    "showFloatingTooltip": true,
+                    "symbols": [
+                        {
+                            "title": "Forex",
+                            "symbols": [
+                                { "s": "FX:EURUSD" },
+                                { "s": "FX:GBPUSD" },
+                                { "s": "FX:USDJPY" },
+                                { "s": "FX:USDCHF" },
+                                { "s": "FX:AUDUSD" },
+                                { "s": "FX:USDCAD" }
+                            ]
+                        },
+                        {
+                            "title": "Commodities",
+                            "symbols": [
+                                { "s": "FOREXCOM:XAUUSD", "d": "Gold" },
+                                { "s": "FOREXCOM:XAGUSD", "d": "Silver" },
+                                { "s": "NYMEX:CL1!", "d": "Crude Oil" }
+                            ]
+                        }
+                    ],
+                    "showMarketStatus": true
+                }
+                </script>
+            </div>
+        </div>
+    </section>
+    <!-- AI Trading Section -->
+    <section class="section" id="ai">
+        <div class="section-title">
+            <h2>AI Trading Assistant</h2>
+            <p>Our advanced AI analyzes market conditions to provide real-time trading recommendations</p>
+        </div>
+        <div class="tools-grid">
+            <div class="tool-card">
+                <i class="fas fa-robot tool-icon"></i>
+                <h3>Trade Signals</h3>
+                <p>Receive AI-generated buy/sell signals based on technical and fundamental analysis.</p>
+                <a href="https://t.me/ejfxprotrade" class="btn">View Signals</a>
+            </div>
+            <div class="tool-card">
+                <i class="fas fa-lightbulb tool-icon"></i>
+                <h3>Market Insights</h3>
+                <p>Get detailed analysis of market trends, support/resistance levels, and volatility.</p>
+                <a href="#" class="btn">Get Insights</a>
+            </div>
+            <div class="tool-card">
+                <i class="fas fa-project-diagram tool-icon"></i>
+                <h3>Strategy Builder</h3>
+                <p>Create and backtest trading strategies with our AI-powered strategy builder.</p>
+                <a href="#" class="btn">Build Strategy</a>
+            </div>
+        </div>
+    </section>
+    <!-- Market Analysis Section -->
+    <section class="market-analysis-section" id="market-analysis">
+        <div class="market-header" style="text-align:center;">
+            <h2>Market Analysis</h2>
+            <p>Technical analysis for key trading instruments to help you make informed decisions</p>
+        </div>
+        <div class="analysis-widgets">
+            <!-- XAU/USD -->
+            <div class="analysis-card">
+                <h3><i class="fas fa-coins"></i> XAU/USD (Gold)</h3>
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                    {
+                      "interval": "30m",
+                      "width": "100%",
+                      "height": "300",
+                      "symbol": "OANDA:XAUUSD",
+                      "showIntervalTabs": true,
+                      "displayMode": "single",
+                      "locale": "en",
+                      "colorTheme": "dark"
+                    }
+                    </script>
+                </div>
+            </div>
+            <!-- GBP/JPY -->
+            <div class="analysis-card">
+                <h3><i class="fas fa-pound-sign"></i> GBP/JPY</h3>
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                    {
+                      "interval": "30m",
+                      "width": "100%",
+                      "height": "300",
+                      "symbol": "OANDA:GBPJPY",
+                      "showIntervalTabs": true,
+                      "displayMode": "single",
+                      "locale": "en",
+                      "colorTheme": "dark"
+                    }
+                    </script>
+                </div>
+            </div>
+            <!-- GBP/USD -->
+            <div class="analysis-card">
+                <h3><i class="fas fa-pound-sign"></i> GBP/USD</h3>
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                    {
+                      "interval": "30m",
+                      "width": "100%",
+                      "height": "300",
+                      "symbol": "OANDA:GBPUSD",
+                      "showIntervalTabs": true,
+                      "displayMode": "single",
+                      "locale": "en",
+                      "colorTheme": "dark"
+                    }
+                    </script>
+                </div>
+            </div>
+            <!-- US30 -->
+            <div class="analysis-card">
+                <h3><i class="fas fa-chart-line"></i> US30 (DOW)</h3>
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                    {
+                      "interval": "30m",
+                      "width": "100%",
+                      "height": "300",
+                      "symbol": "OANDA:US30USD",
+                      "showIntervalTabs": true,
+                      "displayMode": "single",
+                      "locale": "en",
+                      "colorTheme": "dark"
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>EJFXPROTRADE</h3>
+                <p>Professional forex trading platform with advanced tools, real-time market analysis, and AI-powered insights to maximize your trading success.</p>
+                <div class="social-icons">
+                    <div class="social-icon twitter" onclick="window.open('https://x.com/ejfxprotrade?t=AR0dJg9UUZ6911-7uNgTiA&s=09', '_blank')">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <div class="social-icon telegram" onclick="window.open('https://t.me/ejfxprotrade', '_blank')">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Trading Tools</h3>
+                <ul>
+                    <li><a href="pipcalculator.html">Pip Calculator</a></li>
+                    <li><a href="#">Risk Management</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Market Analysis</h3>
+                <ul>
+                    <li><a href="calender.html">Economic Calendar</a></li>
+                    <li><a href="#">Market Sentiment</a></li>
+                    <li><a href="#market-analysis">Technical Analysis</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> ejfxprotrade@gmail.com</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 EJFXPROTRADE. All rights reserved. Forex trading involves significant risk of loss.</p>
+        </div>
+    </footer>
+    <!-- Chat Button and Widget -->
+    <button class="chat-btn" id="chatBtn" title="Chat">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <span><i class="fas fa-robot"></i> EJFXPROTRADE Chat</span>
+            <button class="chat-close" id="chatClose" title="Close Chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message ai">Hi! 👋 How can I help you with forex trading today?</div>
+        </div>
+        <form class="chat-footer" id="chatForm" autocomplete="off">
+            <input type="text" id="chatInput" placeholder="Type your message..." required />
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+    <script>
+        // Chat widget logic
+        const chatBtn = document.getElementById('chatBtn');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatClose = document.getElementById('chatClose');
+        const chatBody = document.getElementById('chatBody');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        chatBtn.onclick = () => {
+            chatWidget.classList.toggle('active');
+            if(chatWidget.classList.contains('active')) chatInput.focus();
+        };
+        chatClose.onclick = () => { chatWidget.classList.remove('active'); };
+        chatForm.onsubmit = function(e) {
+            e.preventDefault();
+            const msg = chatInput.value.trim();
+            if(!msg) return;
+            appendMessage(msg, 'user');
+            chatInput.value = '';
+            setTimeout(function() {
+                appendMessage(getAIReply(msg), 'ai');
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 700); // Simulate AI typing delay
+            chatBody.scrollTop = chatBody.scrollHeight;
+        };
+        function appendMessage(msg, sender) {
+            const div = document.createElement('div');
+            div.className = 'chat-message ' + sender;
+            div.innerText = msg;
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        // Simple simulated AI replies
+        function getAIReply(msg) {
+            msg = msg.toLowerCase();
+            if(msg.includes('pip')) return "You can use our Pip Calculator tool for pip value calculations. Need a link?";
+            if(msg.includes('chart')) return "Our Chart tool provides live forex charts. Try the Chart menu option above!";
+            if(msg.includes('ai') || msg.includes('signal')) return "Our AI Trading Assistant gives you real-time trade signals and insights.";
+            if(msg.includes('hello') || msg.includes('hi')) return "Hello! How can I assist you with trading today?";
+            return "Thank you for your message! Our team will respond as soon as possible.";
+        }
+        // Mobile menu toggle with auto button change
+        function setupMobileMenu() {
+            const menuBtn = document.getElementById('menuBtn');
+            const navMenu = document.getElementById('navMenu');
+            menuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                if (navMenu.classList.contains('active')) {
+                    menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
+                }
+            });
+            // Close menu when clicking on links
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+        // Smooth scrolling for anchor links
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            setupMobileMenu();
+            setupSmoothScrolling();
+            // Highlight active menu item based on scroll position
+            window.addEventListener('scroll', () => {
+                const sections = document.querySelectorAll('section');
+                const navLinks = document.querySelectorAll('nav a');
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= (sectionTop - 100)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

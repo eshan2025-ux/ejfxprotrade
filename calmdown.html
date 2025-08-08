@@ -6,38 +6,161 @@
     <title>Calm Down - FX Stress Relief</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        html, body {
-            width: 100%;
-            height: 100%;
-            min-height: 100%;
-            max-height: 100vh;
-            overflow: hidden; /* Prevent any scrolling! */
+        :root {
+            --primary: #ff6b00;
+            --primary-dark: #e05a00;
+            --primary-light: #ff8b33;
+            --dark: #0a0e17;
+            --darker: #06090f;
+            --card-bg: #131a2d;
+            --light: #f0f4f8;
+            --gray: #8a94a6;
+            --success: #00e676;
+            --danger: #ff3d71;
+            --card-radius: 16px;
+            --glow: 0 0 15px rgba(255, 107, 0, 0.6);
         }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        html { scroll-behavior: smooth; }
         body {
             background: linear-gradient(135deg, #0c0c18, #1a1a2e, #0f1123);
             color: #f5f5f5;
-            height: 100vh;
-            width: 100vw;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        /* HEADER MENU (exactly matches index.html) */
+        header {
+            background: rgba(15, 20, 30, 0.95);
+            border-bottom: 2px solid var(--primary);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 2rem;
+            height: 80px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden; /* Prevent vertical and horizontal scroll */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 2rem;
             position: relative;
-            padding: 20px;
+            overflow: hidden;
         }
-
-        .bubble, .fx-line {
-            pointer-events: none;
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-right: 10px;
+            position: relative;
+            z-index: 2;
+            text-shadow: var(--glow);
+            animation: pulse 2s infinite;
         }
-
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), #ffcc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+            animation: logoGlow 3s infinite alternate;
+        }
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0) 70%);
+            animation: rotate 15s linear infinite;
+            z-index: 1;
+        }
+        nav {
+            flex-grow: 1;
+            transition: left 0.4s;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav li {
+            margin-right: 1.5rem;
+        }
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        nav a i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        nav a:hover, nav a.active {
+            background: rgba(255, 107, 0, 0.2);
+            color: var(--primary);
+        }
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+        /* Sidebar menu for mobile */
+        @media (max-width: 860px) {
+            .menu-btn {
+                display: block;
+                position: absolute;
+                right: 2rem;
+            }
+            nav {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 260px;
+                height: 100vh;
+                background: rgba(15, 20, 30, 0.98);
+                z-index: 99;
+                transition: all 0.4s cubic-bezier(.77,0,.18,1);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+                padding-top: 80px;
+            }
+            nav.active {left: 0;}
+            nav ul {flex-direction: column; padding: 20px;}
+            nav li {margin: 0 0 1rem 0; width: 100%;}
+            nav a {padding: 0.8rem 1.2rem; font-size: 1.1rem; border-radius: 12px;}
+        }
+        /* --- END HEADER MENU --- */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0 0 0;
+            /* Ensures page content always sits below header */
+        }
+        @media (max-width: 860px) {
+            .main-content { padding-top: 30px; }
+        }
+        .bubble, .fx-line { pointer-events: none; }
         .bubble {
             position: absolute;
             border-radius: 50%;
@@ -45,7 +168,6 @@
             animation: float 15s infinite ease-in-out;
             z-index: -1;
         }
-
         .fx-line {
             position: absolute;
             height: 2px;
@@ -53,20 +175,16 @@
             animation: linePulse 8s infinite ease-in-out;
             z-index: -1;
         }
-
         .container {
-            max-width: 1200px;
             width: 100%;
             text-align: center;
             padding: 20px;
             z-index: 1;
         }
-
         .header {
             margin-bottom: 60px;
             animation: fadeInDown 1.2s ease-out;
         }
-
         h1 {
             font-size: 4rem;
             margin-bottom: 15px;
@@ -77,7 +195,6 @@
             letter-spacing: 1px;
             font-weight: 800;
         }
-
         .subtitle {
             font-size: 1.4rem;
             color: #bbb;
@@ -85,7 +202,6 @@
             margin: 0 auto;
             line-height: 1.6;
         }
-
         .buttons-container {
             display: flex;
             flex-wrap: wrap;
@@ -93,7 +209,6 @@
             gap: 50px;
             margin: 50px 0;
         }
-
         .btn {
             position: relative;
             width: clamp(140px, 28vw, 320px);
@@ -118,16 +233,13 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
-
         .btn:active {
             transform: scale(0.96) rotate(-2deg);
         }
-
         .btn:hover {
             transform: scale(1.08) rotate(3deg);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
         }
-
         .btn::before {
             content: '';
             position: absolute;
@@ -143,7 +255,6 @@
             );
             animation: rotate 4s linear infinite;
         }
-
         .btn::after {
             content: '';
             position: absolute;
@@ -151,7 +262,6 @@
             background: linear-gradient(45deg, #1a1a2e, #16213e);
             border-radius: 50%;
         }
-
         .btn-content {
             position: relative;
             z-index: 2;
@@ -164,7 +274,6 @@
             padding: 18% 0 15% 0;
             gap: 0.2em;
         }
-
         .btn-icon, .btn-emoji {
             font-size: clamp(2.1rem, 4vw, 3.5rem);
             line-height: 1;
@@ -174,13 +283,11 @@
             justify-content: center;
             transition: all 0.3s;
         }
-
         .btn-icon {
             color: #ff8c00;
             text-shadow: 0 0 12px rgba(255,140,0,0.55);
             margin-bottom: 0.2em;
         }
-
         .btn-title {
             margin: 0.25em 0 0.10em 0;
             font-size: clamp(1.15rem, 2.2vw, 2.1rem);
@@ -191,32 +298,26 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 8px rgba(255,140,0,0.4);
         }
-
         .btn-emoji {
             filter: drop-shadow(0 0 3px rgba(255,255,255,0.4));
             margin-top: 0.10em;
         }
-
         .btn:hover .btn-icon,
         .btn:focus .btn-icon {
             color: #ffaa33;
             transform: scale(1.11) rotate(8deg);
         }
-
         .btn:hover .btn-emoji,
         .btn:focus .btn-emoji {
             transform: scale(1.12);
             filter: drop-shadow(0 0 10px rgba(255,140,0,0.8));
         }
-
         .lowerloss { animation-delay: 0s; }
         .highloss { animation-delay: 0.5s; }
-
         @keyframes pulse {
             0%, 100% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 140, 0, 0.3); }
             50% { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 50px rgba(255, 140, 0, 0.6); }
         }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -255,7 +356,6 @@
             animation: fadeInUp 1s ease-out;
         }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
         @media (max-width: 1100px) {
             .buttons-container { gap: 36px; }
             .btn { width: 270px; height: 270px; }
@@ -299,56 +399,100 @@
             .btn { max-width: 160px; max-height: 160px; }
             .quote { font-size: 0.85rem; padding: 5px; }
         }
+        @keyframes rotate {0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);}}
+        @keyframes logoGlow {0% { text-shadow: 0 0 5px rgba(255, 107, 0, 0.5);} 100% { text-shadow: 0 0 20px rgba(255, 107, 0, 0.8);}}
+        @keyframes pulse {0% { transform: scale(1);} 50% { transform: scale(1.1);} 100% { transform: scale(1);}
+        }
     </style>
 </head>
 <body>
-    <div class="bubbles-container"></div>
-    <div class="fx-lines-container"></div>
-    <div class="container">
-        <div class="header">
-            <h1>CALM DOWN</h1>
-            <p class="subtitle">Select your stress relief option to regain focus and emotional balance</p>
+    <!-- HEADER NAVIGATION BAR -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-line logo-icon"></i>
+            <div class="logo-text">EJFXPROTRADE</div>
         </div>
-        <div class="buttons-container">
-            <div class="btn lowerloss" tabindex="0">
-                <div class="btn-content">
-                    <div class="btn-icon">
-                        <i class="fas fa-cloud-sun"></i>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="index.html#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
+                <li><a href="pipcalculator.html"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+                <li><a href="chart.html"><i class="fas fa-chart-area"></i> Chart</a></li>
+                <li><a href="index.html#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
+                <li><a href="index.html#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
+                <li><a href="calender.html"><i class="fas fa-calendar-alt"></i> Economic Calendar</a></li>
+                <li><a href="index.html#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+                <li><a href="calmdown.html" class="active"><i class="fas fa-level-down-alt"></i> Calm Down</a></li>
+            </ul>
+        </nav>
+        <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+    </header>
+    <!-- MAIN PAGE CONTENT -->
+    <div class="main-content">
+        <div class="bubbles-container"></div>
+        <div class="fx-lines-container"></div>
+        <div class="container">
+            <div class="header">
+                <h1>CALM DOWN</h1>
+                <p class="subtitle">Select your stress relief option to regain focus and emotional balance</p>
+            </div>
+            <div class="buttons-container">
+                <div class="btn lowerloss" tabindex="0">
+                    <div class="btn-content">
+                        <div class="btn-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <div class="btn-title">LOWER LOSS</div>
+                        <div class="btn-emoji">😐</div>
                     </div>
-                    <div class="btn-title">LOWER LOSS</div>
-                    <div class="btn-emoji">😐</div>
+                </div>
+                <div class="btn highloss" tabindex="0">
+                    <div class="btn-content">
+                        <div class="btn-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="btn-title">HIGH LOSS</div>
+                        <div class="btn-emoji">😭</div>
+                    </div>
                 </div>
             </div>
-            <div class="btn highloss" tabindex="0">
-                <div class="btn-content">
-                    <div class="btn-icon">
-                        <i class="fas fa-wind"></i>
-                    </div>
-                    <div class="btn-title">HIGH LOSS</div>
-                    <div class="btn-emoji">😭</div>
-                </div>
+            <div class="quote">
+                "The stock market is a device for transferring money from the impatient to the patient." - Warren Buffett
             </div>
-        </div>
-        <div class="quote">
-            "The stock market is a device for transferring money from the impatient to the patient." - Warren Buffett
-        </div>
-        <div class="footer">
-            <p>FX Calm Down Platform • Take a break, recharge, and return with clarity</p>
+            <div class="footer">
+                <p>FX Calm Down Platform • Take a break, recharge, and return with clarity</p>
+            </div>
         </div>
     </div>
     <script>
-        // Prevent scrolling by keyboard and mouse/touch
-        window.addEventListener('scroll', function(e) {
-            window.scrollTo(0, 0);
-        });
-
-        // Prevent mobile overscroll bounce
-        document.body.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, { passive: false });
-
-        // Create floating bubbles for background
+        // Mobile menu toggle
+        function setupMobileMenu() {
+            const menuBtn = document.getElementById('menuBtn');
+            const navMenu = document.getElementById('navMenu');
+            menuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                if (navMenu.classList.contains('active')) {
+                    menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
+                }
+            });
+            // Close menu when clicking on links
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
+                });
+            });
+        }
         document.addEventListener('DOMContentLoaded', function() {
+            setupMobileMenu();
+
+            // Create floating bubbles for background
             const body = document.querySelector('body');
             const bubbleCount = window.innerWidth < 500 ? 6 : 15;
             for (let i = 0; i < bubbleCount; i++) {
@@ -381,6 +525,8 @@
                 line.style.animationDelay = `${delay}s`;
                 body.appendChild(line);
             }
+
+            // Calming session buttons
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -434,6 +580,8 @@
             `;
             document.head.appendChild(style);
         });
+
+        // Don't forcibly block scroll on the whole page (let menu logic handle it)
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Live Forex Chart</title>
+  <title>Live Forex Chart | EJFXPROTRADE</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <style>
@@ -14,9 +14,9 @@
     }
 
     :root {
-      --primary: #ff5900;
-      --primary-dark: #e06d00;
-      --primary-light: #ff5833;
+      --primary: #ff6b00;
+      --primary-dark: #e05a00;
+      --primary-light: #ff8b33;
       --dark-bg: #121212;
       --text-primary: #ffffff;
       --text-secondary: #bbbbbb;
@@ -79,74 +79,125 @@
       }
     }
 
-    .header {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      color: #fff;
-      padding: 1.2rem;
-      text-align: center;
-      letter-spacing: 1.5px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(255, 119, 0, 0.3);
-      animation: headerEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 10;
+    /* --- HEADER/NAV styles from index.html --- */
+    header {
+        background: rgba(15, 20, 30, 0.95);
+        border-bottom: 2px solid var(--primary);
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 0 2rem;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      animation: shine 3s infinite;
-    }
-
-    @keyframes shine {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-
-    @keyframes headerEntry {
-      from {
-        transform: translateY(-100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.8rem;
-      animation: pulse 2s infinite;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        margin-right: 2rem;
+        position: relative;
+        overflow: hidden;
     }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+    .logo-icon {
+        color: var(--primary);
+        font-size: 2rem;
+        margin-right: 10px;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+        animation: pulse 2s infinite;
     }
-
-    .logo i {
-      color: #fff;
+    .logo-text {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(45deg, var(--primary), #ffcc00);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 2;
+        animation: logoGlow 3s infinite alternate;
     }
+    .logo::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0) 70%);
+        animation: rotate 15s linear infinite;
+        z-index: 1;
+    }
+    nav {
+        flex-grow: 1;
+        transition: left 0.4s;
+    }
+    nav ul {
+        display: flex;
+        list-style: none;
+    }
+    nav li {
+        margin-right: 1.5rem;
+    }
+    nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.6rem 1.2rem;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    nav a i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+    nav a:hover, nav a.active {
+        background: rgba(255, 107, 0, 0.2);
+        color: var(--primary);
+    }
+    .menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 1.8rem;
+        cursor: pointer;
+        z-index: 101;
+    }
+    @media (max-width: 860px) {
+        .menu-btn {
+            display: block;
+            position: absolute;
+            right: 2rem;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 260px;
+            height: 100vh;
+            background: rgba(15, 20, 30, 0.98);
+            z-index: 99;
+            transition: all 0.4s cubic-bezier(.77,0,.18,1);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            padding-top: 80px;
+        }
+        nav.active {left: 0;}
+        nav ul {flex-direction: column; padding: 20px;}
+        nav li {margin: 0 0 1rem 0; width: 100%;}
+        nav a {padding: 0.8rem 1.2rem; font-size: 1.1rem; border-radius: 12px;}
+    }
+    @keyframes rotate {0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);}}
+    @keyframes logoGlow {0% { text-shadow: 0 0 5px rgba(255, 107, 0, 0.5);} 100% { text-shadow: 0 0 20px rgba(255, 107, 0, 0.8);}}
+    @keyframes pulse {0% { transform: scale(1);} 50% { transform: scale(1.1);} 100% { transform: scale(1);}}
 
     .chart-container {
       flex: 1 1 auto;
@@ -283,17 +334,16 @@
 
     /* Responsive tweaks */
     @media (max-width: 600px) {
-      .header {
+      header {
         font-size: 1.2rem;
         padding: 1rem;
+        height: 64px;
       }
-      .logo {
-        font-size: 1.3rem;
-      }
+      .logo-text {font-size: 1.3rem;}
+      .logo-icon {font-size: 1.4rem;}
     }
-
     @media (max-width: 900px) {
-      .header-content { flex-direction: column; }
+      /* no extra header-content class, so skip */
     }
   </style>
 </head>
@@ -302,19 +352,33 @@
   <div class="loading-overlay" id="loading">
     <div class="loader"></div>
   </div>
-  
+
   <!-- Animated background particles -->
   <div class="bg-particles" id="particles"></div>
-  
-  <div class="header">
-    <div class="header-content">
+
+  <!-- Begin Header/Nav copied from index.html -->
+  <header>
       <div class="logo">
-        <i class="fas fa-chart-line"></i>
-        <span>FOREX PRO CHART</span>
+          <i class="fas fa-chart-line logo-icon"></i>
+          <div class="logo-text">EJFXPROTRADE</div>
       </div>
-    </div>
-  </div>
-  
+      <nav id="navMenu">
+          <ul>
+              <li><a href="index.html#home"><i class="fas fa-home"></i> Home</a></li>
+              <li><a href="index.html#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
+              <li><a href="pipcalculator.html"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+              <li><a href="chart.html" class="active"><i class="fas fa-chart-area"></i> Chart</a></li>
+              <li><a href="index.html#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
+              <li><a href="index.html#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
+              <li><a href="calender.html"><i class="fas fa-calendar-alt"></i> EconomicCalendar</a></li>
+              <li><a href="index.html#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+              <li><a href="comedown.html"><i class="fas fa-level-down-alt"></i> Come Down</a></li>
+          </ul>
+      </nav>
+      <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+  </header>
+  <!-- End Header/Nav -->
+
   <div id="__main-content">
     <div class="chart-container">
       <div class="tradingview-widget-container">
@@ -322,7 +386,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="footer">
     <p>Live Forex Chart &copy; 2025 | Real-time market data | <a href="#">Terms</a> | <a href="#">Privacy</a></p>
     <p>Disclaimer: Trading forex carries a high level of risk and may not be suitable for all investors.</p>
@@ -348,7 +412,7 @@
         container.appendChild(particle);
       }
     }
-    
+
     // Initialize TradingView chart
     function initChart() {
       if (typeof TradingView !== 'undefined') {
@@ -382,10 +446,10 @@
         setTimeout(initChart, 200);
       }
     }
-    
+
     // Responsive chart height
     function resizeChart() {
-      const header = document.querySelector('.header');
+      const header = document.querySelector('header');
       const footer = document.querySelector('.footer');
       const mainContent = document.getElementById('__main-content');
       const chartContainer = document.querySelector('.chart-container');
@@ -402,13 +466,39 @@
       chartDiv.style.height = '100%';
       chartDiv.style.width = '100%';
     }
-    
+
+    // Mobile menu toggle
+    function setupMobileMenu() {
+        const menuBtn = document.getElementById('menuBtn');
+        const navMenu = document.getElementById('navMenu');
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            if (navMenu.classList.contains('active')) {
+                menuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                document.body.style.overflow = 'hidden';
+            } else {
+                menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                document.body.style.overflow = '';
+            }
+        });
+        // Close menu when clicking on links
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                document.body.style.overflow = '';
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
       createParticles();
       resizeChart();
       initChart();
+      setupMobileMenu();
     });
-    
+
     window.addEventListener('resize', resizeChart);
     window.addEventListener('load', initChart);
   </script>

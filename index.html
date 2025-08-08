@@ -21,9 +21,7 @@
             --glow: 0 0 15px rgba(255, 107, 0, 0.6);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-
         html { scroll-behavior: smooth; }
-
         body {
             background: linear-gradient(135deg, #0c1220 0%, #0a0e17 100%);
             color: var(--light);
@@ -95,20 +93,22 @@
         nav li {
             margin-right: 1.5rem;
         }
+        /* FIX: Make menu text and icons bigger */
         nav a {
             color: var(--light);
             text-decoration: none;
-            font-weight: 600;
-            padding: 0.6rem 1.2rem;
+            font-weight: 700;
+            padding: 1rem 2rem;
             border-radius: 30px;
             transition: all 0.3s ease;
             position: relative;
             display: flex;
             align-items: center;
+            font-size: 1.3rem;
         }
         nav a i {
-            margin-right: 8px;
-            font-size: 1.1rem;
+            margin-right: 12px;
+            font-size: 1.6rem;
         }
         nav a:hover, nav a.active {
             background: rgba(255, 107, 0, 0.2);
@@ -582,7 +582,7 @@
         }
         @media (max-width: 992px) {
             nav li {margin-right: 1rem;}
-            nav a {padding: 0.6rem 1rem; font-size: 0.9rem;}
+            nav a {padding: 0.6rem 1rem; font-size: 1.1rem;}
         }
         @media (max-width: 768px) {
             .hero {padding: 1rem; padding-top: 30px;}
@@ -629,9 +629,9 @@
                 <li><a href="chart.html"><i class="fas fa-chart-area"></i> Chart</a></li>
                 <li><a href="#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
                 <li><a href="#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
-                <li><a href="calender.html"><i class="fas fa-calendar-alt"></i> Economic Calendar</a></li>
+                <li><a href="calender.html"><i class="fas fa-calendar-alt"></i> EconomicCalendar</a></li>
                 <li><a href="#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
-                <li><a href="calmdown.html"><i class="fas fa-level-down-alt"></i> Calm Down</a></li>
+                <li><a href="comedown.html"><i class="fas fa-level-down-alt"></i> Come Down</a></li>
             </ul>
         </nav>
         <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>

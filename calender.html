@@ -15,12 +15,21 @@
       --text-light: #ffffff;
       --text-gray: #b0b0b0;
       --transition: all 0.3s ease;
+      /* Index.html header variables */
+      --primary: #ff6b00;
+      --primary-dark: #e05a00;
+      --primary-light: #ff8b33;
+      --dark: #0a0e17;
+      --darker: #06090f;
+      --card-bg-menu: #131a2d;
+      --light: #f0f4f8;
+      --gray: #8a94a6;
+      --success: #00e676;
+      --danger: #ff3d71;
+      --card-radius: 16px;
+      --glow: 0 0 15px rgba(255, 107, 0, 0.6);
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box;}
     body {
       background: radial-gradient(circle at center, #1a1a1a 0%, var(--dark-bg) 100%);
       color: var(--text-light);
@@ -35,24 +44,11 @@
       margin: 0 auto;
       padding: 16px;
     }
-    /* Overlay for mobile menu */
-    .menu-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(15, 20, 30, 0.7);
-      z-index: 98;
-      transition: opacity 0.3s;
-    }
-    .menu-overlay.active {
-      display: block;
-      opacity: 1;
-    }
-    /* Responsive Header/Menu Styles */
-    header.site-header {
+
+    /* --- BEGIN: index.html HEADER/NAV MENU STYLES, NAMESPACED --- */
+    header.menu-header {
       background: rgba(15, 20, 30, 0.95);
-      border-bottom: 2px solid #ff6b00;
+      border-bottom: 2px solid var(--primary);
       backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
@@ -62,9 +58,8 @@
       display: flex;
       align-items: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      margin-bottom: 20px;
     }
-    .logo {
+    .menu-logo {
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -72,41 +67,51 @@
       position: relative;
       overflow: hidden;
     }
-    .logo-icon {
-      color: #ff6b00;
+    .menu-logo-icon {
+      color: var(--primary);
       font-size: 2rem;
       margin-right: 10px;
       position: relative;
       z-index: 2;
-      text-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
-      animation: pulse 2s infinite;
+      text-shadow: var(--glow);
+      animation: menu-pulse 2s infinite;
     }
-    .logo-text-menu {
+    .menu-logo-text {
       font-size: 1.8rem;
       font-weight: 800;
-      background: linear-gradient(45deg, #ff6b00, #ffcc00);
+      background: linear-gradient(45deg, var(--primary), #ffcc00);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       letter-spacing: 1px;
       position: relative;
       z-index: 2;
-      animation: logoGlow 3s infinite alternate;
+      animation: menuLogoGlow 3s infinite alternate;
     }
-    nav {
+    .menu-logo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,107,0,0.2) 0%, rgba(255,107,0,0) 70%);
+      animation: menu-rotate 15s linear infinite;
+      z-index: 1;
+    }
+    nav.menu-nav {
       flex-grow: 1;
+      transition: left 0.4s;
     }
-    nav ul {
+    nav.menu-nav ul {
       display: flex;
       list-style: none;
-      justify-content: flex-end;
-      flex-wrap: wrap;
     }
-    nav li {
+    nav.menu-nav li {
       margin-right: 1.5rem;
     }
-    nav a {
-      color: #f0f4f8;
+    nav.menu-nav a {
+      color: var(--light);
       text-decoration: none;
       font-weight: 600;
       padding: 0.6rem 1.2rem;
@@ -116,71 +121,62 @@
       display: flex;
       align-items: center;
     }
-    nav a i {
+    nav.menu-nav a i {
       margin-right: 8px;
       font-size: 1.1rem;
     }
-    nav a:hover {
+    nav.menu-nav a:hover, nav.menu-nav a.active {
       background: rgba(255, 107, 0, 0.2);
-      color: #ff6b00;
-    }
-    nav a.active {
-      background: rgba(255, 107, 0, 0.25);
-      color: #ff6b00;
-      box-shadow: 0 4px 10px rgba(255, 107, 0, 0.2);
+      color: var(--primary);
     }
     .menu-btn {
       display: none;
       background: none;
       border: none;
-      color: #ff6b00;
+      color: var(--primary);
       font-size: 1.8rem;
       cursor: pointer;
       z-index: 101;
     }
-    @media (max-width: 900px) {
-      header.site-header {
-        padding: 0 1rem;
-        height: 60px;
-      }
-      .logo-text-menu {
-        font-size: 1.2rem;
-      }
-      nav {
-        position: fixed;
-        top: 0;
-        left: -260px;
-        width: 260px;
-        height: 100vh;
-        background: rgba(15, 20, 30, 0.98);
-        z-index: 99;
-        transition: left 0.4s;
-        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-        padding-top: 60px;
-      }
-      nav.active {
-        left: 0;
-      }
-      nav ul {
-        flex-direction: column;
-        padding: 20px;
-      }
-      nav li {
-        margin: 0 0 1rem 0;
-        width: 100%;
-      }
-      nav a {
-        padding: 0.8rem 1.2rem;
-        font-size: 1.1rem;
-        border-radius: 12px;
-      }
+    @media (max-width: 860px) {
       .menu-btn {
         display: block;
         position: absolute;
         right: 2rem;
       }
+      nav.menu-nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 260px;
+        height: 100vh;
+        background: rgba(15, 20, 30, 0.98);
+        z-index: 99;
+        transition: all 0.4s cubic-bezier(.77,0,.18,1);
+        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        padding-top: 80px;
+      }
+      nav.menu-nav.active {left: 0;}
+      nav.menu-nav ul {flex-direction: column; padding: 20px;}
+      nav.menu-nav li {margin: 0 0 1rem 0; width: 100%;}
+      nav.menu-nav a {padding: 0.8rem 1.2rem; font-size: 1.1rem; border-radius: 12px;}
     }
-    /* Header & Logo Styles (Calendar) */
+    @keyframes menu-pulse {
+      0% { transform: scale(1);}
+      50% { transform: scale(1.1);}
+      100% { transform: scale(1);}
+    }
+    @keyframes menuLogoGlow {
+      0% { text-shadow: 0 0 5px rgba(255, 107, 0, 0.5);}
+      100% { text-shadow: 0 0 20px rgba(255, 107, 0, 0.8);}
+    }
+    @keyframes menu-rotate {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    /* --- END: index.html HEADER/NAV MENU STYLES, NAMESPACED --- */
+
+    /* --- calender.html original styles below (unchanged) --- */
     .header {
       display: flex;
       flex-direction: column;
@@ -248,7 +244,6 @@
       text-transform: uppercase;
       animation: subtitlePulse 3s infinite alternate;
     }
-    /* Button Group */
     .button-group {
       display: flex;
       justify-content: center;
@@ -287,7 +282,6 @@
       margin-right: 10px;
       font-size: 1.2rem;
     }
-  /* TradingView Chart Container */
     .tradingview-widget-container {
       width: 100%;
       max-width: 1000px;
@@ -298,7 +292,6 @@
       border: 1px solid rgba(255, 102, 0, 0.2);
       height: 500px;
     }
-    /* Calendar Container */
     .calendar-container {
       display: none;
       background: var(--card-bg);
@@ -308,13 +301,12 @@
       border: 1px solid rgba(255, 102, 0, 0.2);
       margin: 0 auto;
       max-width: 1000px;
-      height: 600px; /* Increased height for better calendar display */
+      height: 600px;
     }
     .calendar-container.active {
       display: block;
       animation: fadeIn 0.8s ease;
     }
-    /* Calendar widget container */
     .calendar-widget-container {
       width: 100%;
       height: 100%;
@@ -329,7 +321,6 @@
       height: 100%;
       border: none;
     }
-    /* Footer */
     .footer {
       margin-top: 40px;
       color: var(--text-gray);
@@ -337,7 +328,6 @@
       padding: 20px;
       border-top: 1px solid rgba(255, 102, 0, 0.1);
     }
-    /* Animations */
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
       70% { box-shadow: 0 0 0 15px rgba(255, 102, 0, 0); }
@@ -359,74 +349,59 @@
       0% { opacity: 0.7; text-shadow: 0 0 5px rgba(255, 102, 0, 0.3); }
       100% { opacity: 1; text-shadow: 0 0 15px rgba(255, 102, 0, 0.7); }
     }
-    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .logo-text {font-size: 2.2rem;}
+      header.menu-header {height: 70px;}
+    }
+    @media (max-width: 900px) {
+      .header {padding: 14px 0;}
+      .logo-e {width: 70px; height: 70px;}
+      .logo-text {font-size: 2rem;}
+      .logo-subtitle {font-size: 1.1rem;}
+      .tradingview-widget-container {height: 400px;}
+      .calendar-container {height: 500px;}
+      header.menu-header {height: 60px;}
+    }
     @media (max-width: 768px) {
-      .logo-container {
-        flex-direction: column;
-        margin-bottom: 20px;
-      }
-      .logo-e {
-        margin-right: 0;
-        margin-bottom: 15px;
-        width: 70px;
-        height: 70px;
-      }
-      .logo-text {
-        font-size: 2.2rem;
-      }
-      .logo-subtitle {
-        font-size: 1.2rem;
-      }
-      .button-group {
-        flex-direction: column;
-        align-items: center;
-      }
-      .filter-btn {
-        width: 100%;
-        max-width: 300px;
-        padding: 12px 20px;
-      }
-      .tradingview-widget-container {
-        height: 400px;
-      }
-      .calendar-container {
-        height: 500px;
-      }
+      .logo-container {flex-direction: column; margin-bottom: 20px;}
+      .logo-e {margin-right: 0; margin-bottom: 15px;}
+      .button-group {flex-direction: column; align-items: center;}
+      .filter-btn {width: 100%; max-width: 300px; padding: 12px 20px;}
+      .tradingview-widget-container {height: 400px;}
+      .calendar-container {height: 500px;}
     }
     @media (max-width: 480px) {
-      .calendar-container {
-        height: 450px;
-      }
-      .tradingview-widget-container {
-        height: 350px;
-      }
+      .calendar-container {height: 450px;}
+      .tradingview-widget-container {height: 350px;}
+      .logo-text {font-size: 1.3rem;}
     }
   </style>
 </head>
 <body>
-  <div class="menu-overlay" id="menuOverlay"></div>
-  <header class="site-header">
-    <div class="logo">
-      <i class="fas fa-chart-line logo-icon"></i>
-      <div class="logo-text-menu">EJFXPROTRADE</div>
+  <!-- HEADER/NAV MENU FROM INDEX.HTML, NOW NAMESPACED -->
+  <header class="menu-header">
+    <div class="menu-logo">
+      <i class="fas fa-chart-line menu-logo-icon"></i>
+      <div class="menu-logo-text">EJFXPROTRADE</div>
     </div>
-    <nav id="navMenu">
+    <nav class="menu-nav" id="navMenu">
       <ul>
         <li><a href="index.html#home"><i class="fas fa-home"></i> Home</a></li>
         <li><a href="index.html#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
         <li><a href="pipcalculator.html"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+        <li><a href="chart.html"><i class="fas fa-chart-area"></i> Chart</a></li>
         <li><a href="index.html#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
         <li><a href="index.html#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
-        <li><a href="calender.html" class="active"><i class="fas fa-calendar-alt"></i>EconomicCalendar</a></li>
+        <li><a href="calender.html" class="active"><i class="fas fa-calendar-alt"></i> EconomicCalendar</a></li>
         <li><a href="index.html#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+        <li><a href="calmdown.html"><i class="fas fa-level-down-alt"></i> Calm Down</a></li>
       </ul>
     </nav>
-    <button class="menu-btn" id="menuBtn">
-      <i class="fas fa-bars"></i>
-    </button>
+    <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
   </header>
+  <!-- HEADER/NAV MENU END -->
+
   <div class="container">
-    <!-- Header with animated logo -->
     <header class="header">
       <div class="logo-container">
         <div class="logo-e">
@@ -438,7 +413,6 @@
         </div>
       </div>
     </header>
-    <!-- Button Group -->
     <div class="button-group">
       <button class="filter-btn active" onclick="showCalendar(event, 'today')">
         <i class="fas fa-calendar-day"></i> TODAY'S NEWS
@@ -447,7 +421,6 @@
         <i class="fas fa-fire"></i> HIGH IMPACT EVENTS
       </button>
     </div>
-    <!-- Today News Calendar -->
     <div id="today" class="calendar-container active">
       <div class="calendar-widget-container">
         <div class="tradingview-widget-container__widget"></div>
@@ -464,9 +437,6 @@
         </script>
       </div>
     </div>
-       
-    </div>
-     <!-- High Impact News Calendar -->
     <div id="high" class="calendar-container">
       <div class="calendar-widget-container">
         <div class="tradingview-widget-container__widget"></div>
@@ -482,19 +452,17 @@
         </script>
       </div>
     </div>
-    <!-- Footer -->
     <footer class="footer">
       <p>© 2025 EJFXPROTRADE - All Rights Reserved | Real-time Economic Calendar & Market Analysis</p>
     </footer>
   </div>
   <script>
+    // Responsive mobile menu toggle for nav
     function setupMobileMenu() {
       const menuBtn = document.getElementById('menuBtn');
       const navMenu = document.getElementById('navMenu');
-      const menuOverlay = document.getElementById('menuOverlay');
       menuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
-        menuOverlay.classList.toggle('active');
         if (navMenu.classList.contains('active')) {
           menuBtn.innerHTML = '<i class="fas fa-times"></i>';
           document.body.style.overflow = 'hidden';
@@ -503,26 +471,20 @@
           document.body.style.overflow = '';
         }
       });
-      // Close menu when clicking on links or overlay
-      const navLinks = navMenu.querySelectorAll('a');
+      // Close menu when clicking on links
+      const navLinks = document.querySelectorAll('nav.menu-nav a');
       navLinks.forEach(link => {
         link.addEventListener('click', () => {
           navMenu.classList.remove('active');
-          menuOverlay.classList.remove('active');
           menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
           document.body.style.overflow = '';
         });
       });
-      menuOverlay.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        menuOverlay.classList.remove('active');
-        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-        document.body.style.overflow = '';
-      });
     }
-    document.addEventListener('DOMContentLoaded', setupMobileMenu);
-  </script>
-  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setupMobileMenu();
+    });
+
     // Function to show calendar
     function showCalendar(event, id) {
       event.preventDefault();

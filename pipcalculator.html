@@ -38,7 +38,7 @@
       min-height: 100vh;
       padding: 0;
     }
-    /* Header/Menu styles */
+    /* Header/Menu styles (copied from index.html for perfect match) */
     header {
       background: rgba(15, 20, 30, 0.95);
       border-bottom: 2px solid var(--primary);
@@ -94,7 +94,7 @@
     }
     nav {
       flex-grow: 1;
-      position: relative;
+      transition: left 0.4s;
     }
     nav ul {
       display: flex;
@@ -118,14 +118,9 @@
       margin-right: 8px;
       font-size: 1.1rem;
     }
-    nav a:hover {
+    nav a:hover, nav a.active {
       background: rgba(255, 107, 0, 0.2);
       color: var(--primary);
-    }
-    nav a.active {
-      background: rgba(255, 107, 0, 0.25);
-      color: var(--primary);
-      box-shadow: 0 4px 10px rgba(255, 107, 0, 0.2);
     }
     .menu-btn {
       display: none;
@@ -136,14 +131,11 @@
       cursor: pointer;
       z-index: 101;
     }
-    /* Responsive mobile menu (slide from left, overlay) */
-    @media (max-width: 900px) {
-      header {
-        padding: 0 1rem;
-        height: 60px;
-      }
-      .logo-text {
-        font-size: 1.2rem;
+    @media (max-width: 860px) {
+      .menu-btn {
+        display: block;
+        position: absolute;
+        right: 2rem;
       }
       nav {
         position: fixed;
@@ -153,36 +145,16 @@
         height: 100vh;
         background: rgba(15, 20, 30, 0.98);
         z-index: 99;
-        transition: left 0.4s;
+        transition: all 0.4s cubic-bezier(.77,0,.18,1);
         box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-        padding-top: 60px;
+        padding-top: 80px;
       }
-      nav.active {
-        left: 0;
-      }
-      nav ul {
-        flex-direction: column;
-        padding: 20px;
-      }
-      nav ul.active {
-        display: flex;
-      }
-      nav li {
-        margin: 0 0 1rem 0;
-        width: 100%;
-      }
-      nav a {
-        padding: 0.8rem 1.2rem;
-        font-size: 1.1rem;
-        border-radius: 12px;
-      }
-      .menu-btn {
-        display: block;
-        position: absolute;
-        right: 2rem;
-      }
+      nav.active {left: 0;}
+      nav ul {flex-direction: column; padding: 20px;}
+      nav li {margin: 0 0 1rem 0; width: 100%;}
+      nav a {padding: 0.8rem 1.2rem; font-size: 1.1rem; border-radius: 12px;}
     }
-    /* Calculator styles */
+    /* Calculator styles (unchanged) */
     .container {
       background: rgba(15, 20, 35, 0.95);
       border-radius: 20px;
@@ -444,10 +416,12 @@
         font-size: 16px;
       }
     }
+    @keyframes logoGlow {0% { text-shadow: 0 0 5px rgba(255, 107, 0, 0.5);} 100% { text-shadow: 0 0 20px rgba(255, 107, 0, 0.8);}}
+    @keyframes rotate {0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);}}
   </style>
 </head>
 <body>
-  <!-- Main Menu/Header -->
+  <!-- Main Menu/Header (copied from index.html) -->
   <header>
     <div class="logo">
       <i class="fas fa-chart-line logo-icon"></i>
@@ -458,15 +432,15 @@
         <li><a href="index.html#home"><i class="fas fa-home"></i> Home</a></li>
         <li><a href="index.html#tools"><i class="fas fa-tools"></i> Trading Tools</a></li>
         <li><a href="pipcalculator.html" class="active"><i class="fas fa-calculator"></i> Pip Calculator</a></li>
+        <li><a href="chart.html"><i class="fas fa-chart-area"></i> Chart</a></li>
         <li><a href="index.html#market"><i class="fas fa-chart-bar"></i> Market Data</a></li>
         <li><a href="index.html#ai"><i class="fas fa-robot"></i> AI Trading</a></li>
-        <li><a href="calender.html"><i class="fas fa-calendar-alt"></i>EconomicCalendar</a></li>
+        <li><a href="calender.html"><i class="fas fa-calendar-alt"></i> EconomicCalendar</a></li>
         <li><a href="index.html#market-analysis"><i class="fas fa-chart-pie"></i> Market Analysis</a></li>
+        <li><a href="comedown.html"><i class="fas fa-level-down-alt"></i> Come Down</a></li>
       </ul>
     </nav>
-    <button class="menu-btn" id="menuBtn">
-      <i class="fas fa-bars"></i>
-    </button>
+    <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
   </header>
   <!-- Calculator Content -->
   <div class="container">
@@ -527,15 +501,13 @@
       </div>
     </div>
   </div>
-  <!-- Mobile menu toggle JS (slide left, overlay, close on link, hamburger/close icon) -->
+  <!-- Mobile menu toggle JS (copied from index.html for perfect match) -->
   <script>
     function setupMobileMenu() {
       const menuBtn = document.getElementById('menuBtn');
       const navMenu = document.getElementById('navMenu');
-      const navUl = navMenu.querySelector('ul');
       menuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
-        navUl.classList.toggle('active');
         if (navMenu.classList.contains('active')) {
           menuBtn.innerHTML = '<i class="fas fa-times"></i>';
           document.body.style.overflow = 'hidden';
@@ -545,11 +517,10 @@
         }
       });
       // Close menu when clicking on links
-      const navLinks = navMenu.querySelectorAll('a');
+      const navLinks = document.querySelectorAll('nav a');
       navLinks.forEach(link => {
         link.addEventListener('click', () => {
           navMenu.classList.remove('active');
-          navUl.classList.remove('active');
           menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
           document.body.style.overflow = '';
         });
@@ -776,4 +747,4 @@
     document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
-</html>   
+</html>
